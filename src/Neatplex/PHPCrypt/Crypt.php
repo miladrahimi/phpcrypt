@@ -35,9 +35,13 @@ class Crypt implements CryptInterface
      * Construct
      *
      * @param string|null $key
+     * @throws InvalidArgumentException
+     * @throws PHPCryptException
      */
     public function __construct($key = null)
     {
+        if (!function_exists("mcrypt_encrypt"))
+            throw new PHPCryptException("MCrypt is not installed");
         $this->cipher_name = MCRYPT_RIJNDAEL_256;
         $this->cipher_mode = MCRYPT_MODE_CBC;
         if (!is_null($key)) {
@@ -58,12 +62,13 @@ class Crypt implements CryptInterface
     /**
      * @param string $key
      *
+     * @throws InvalidArgumentException
      * @throws PHPCryptException
      */
     public function setKey($key)
     {
         if (!isset($key) || !is_string($key))
-            throw new \InvalidArgumentException("Key must be a string value");
+            throw new InvalidArgumentException("Key must be a string value");
         if (!in_array(strlen($key), mcrypt_module_get_supported_key_sizes($this->cipher_name)))
             throw new PHPCryptException("Unsupported key size");
         $this->key = $key;
@@ -74,14 +79,13 @@ class Crypt implements CryptInterface
      *
      * @param string $content
      * @return string
-     * @throws PHPCryptException
-     *
+     * @throws InvalidArgumentException
      * @see http://goo.gl/ENz2sJ
      */
     function encrypt($content)
     {
         if (!isset($content) || !is_scalar($content))
-            throw new \InvalidArgumentException("Content must be a scalar value");
+            throw new InvalidArgumentException("Content must be a scalar value");
         $iv_size = mcrypt_get_iv_size($this->cipher_name, $this->cipher_mode);
         $iv = mcrypt_create_iv($iv_size);
         $r = mcrypt_encrypt($this->cipher_name, $this->key, $content, $this->cipher_mode, $iv);
@@ -93,14 +97,13 @@ class Crypt implements CryptInterface
      *
      * @param string $content
      * @return bool|string
-     * @throws PHPCryptException
-     *
+     * @throws InvalidArgumentException
      * @see http://goo.gl/ENz2sJ
      */
     function decrypt($content)
     {
         if (!isset($content) || !is_scalar($content))
-            throw new \InvalidArgumentException("Content must be a scalar value");
+            throw new InvalidArgumentException("Content must be a scalar value");
         $content = base64_decode($content);
         $iv_size = mcrypt_get_iv_size($this->cipher_name, $this->cipher_mode);
         $iv = substr($content, 0, $iv_size);
@@ -118,12 +121,13 @@ class Crypt implements CryptInterface
 
     /**
      * @param int $cipher_name
+     * @throws InvalidArgumentException
      * @throws PHPCryptException
      */
     public function setCipherName($cipher_name)
     {
         if (!isset($cipher_name) || !is_string($cipher_name))
-            throw new \InvalidArgumentException("Cipher type must be a string value");
+            throw new InvalidArgumentException("Cipher type must be a string value");
         if (!in_array($cipher_name, mcrypt_list_algorithms()))
             throw new PHPCryptException("Unsupported cipher name");
         $this->cipher_name = $cipher_name;
@@ -139,12 +143,13 @@ class Crypt implements CryptInterface
 
     /**
      * @param int $cipher_mode
+     * @throws InvalidArgumentException
      * @throws PHPCryptException
      */
     public function setCipherMode($cipher_mode)
     {
         if (!isset($cipher_mode) || !is_string($cipher_mode))
-            throw new \InvalidArgumentException("Cipher type must be a string value");
+            throw new InvalidArgumentException("Cipher type must be a string value");
         if (!in_array($cipher_mode, mcrypt_list_modes()))
             throw new PHPCryptException("Unsupported cipher mode");
         $this->cipher_name = $cipher_mode;

@@ -19,7 +19,7 @@ interface CryptInterface {
      * @param string $content
      * @return string
      */
-    public function encrypt($content);
+    function encrypt($content);
 
     /**
      * Decrypt the given content
@@ -27,6 +27,6 @@ interface CryptInterface {
      * @param string $content
      * @return string
      */
-    public function decrypt($content);
+    function decrypt($content);
 
 }

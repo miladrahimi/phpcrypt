@@ -2,7 +2,7 @@
 Free PHP cryptography tools for neat and powerful projects!
 
 ## Documentation
-PHPCrypt is a tiny package for encrypting and decrypting data.
+PHPCrypt is a tiny package for encrypting and decrypting data and hashing passwords.
 It uses PHP MCrypt extension.
 It is used to in [Neatplex](http://neatplex.com) packages.
 
@@ -114,19 +114,43 @@ $crypt->setCipherMode(MCRYPT_MODE_CFB);
 ```
 *   The default cipher mode is `MCRYPT_MODE_CBC`.
 
+### Password Hashing
+PHPCrypt provide easiest way to hash and verify password.
+```
+use Neatplex\PHPCrypt\Password;
+
+$hashed_password = Password::hash("ddd");
+```
+
+### Password Verifying
+Once you hashed a password, you need to verify it next times.
+It's so easy as following examples illustrates:
+```
+use Neatplex\PHPCrypt\Password;
+
+$r = Password::verify($user_input_password, $hashed_password);
+if($r) {
+    echo "Signed in successfully!";
+} else {
+    echo "The password you entered is wrong";
+}
+```
+
 ### PHPCryptException
 There are some situation which PHPCryptException will be thrown.
 Here are methods and messages:
-*   `Unsupported key size` in `setKey()` when the given key size is not supported by selected cipher.
-*   `Unsupported cipher name` in `setCipherName()` when the given cipher is not supported by current MCrypt version.
-*   `Unsupported cipher mode` in `setCipherMode()` when the given mode is not supported by current MCrypt version.
+*   `MCrypt is not installed` in `Crypt` constructor when the MCrypt extension is not installed.
+*   `MCrypt is not installed` in `Password::hash()` when constructor when the MCrypt extension is not installed.
+*   `Unsupported cipher name` in `Crypt::setCipherName()` when the given cipher is not supported by current MCrypt version.
+*   `Unsupported cipher mode` in `Crypt::setCipherMode()` when the given mode is not supported by current MCrypt version.
+*   `Unsupported key size` in `Crypt::setKey()` when the given key size is not supported by selected cipher.
 
 ## Contributor
 *	[Milad Rahimi](http://miladrahimi.com)
 
 ## Official homepage
-*   [PHPSession](http://phpsession.neatplex.com) (Soon!)
+*   [PHPCrypt](http://phpcrypt.neatplex.com) (Soon!)
 
 ## License
-PHPSession is created by [Neatplex](http://neatplex.com)
+PHPCrypt is created by [Neatplex](http://neatplex.com)
 and released under the [MIT License](http://opensource.org/licenses/mit-license.php).
