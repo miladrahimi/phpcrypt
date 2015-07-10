@@ -1,4 +1,4 @@
-<?php namespace Neatplex\PHPCrypt;
+<?php namespace MiladRahimi\PHPCrypt;
 
 /**
  * Interface CryptInterface
@@ -7,7 +7,7 @@
  * The "encrypt()" API must encrypt the given content.
  * The "decrypt()" API must decrypt the given content.
  *
- * @package Neatplex\PHPRouter
+ * @package MiladRahimi\PHPRouter
  *
  * @author Milad Rahimi <info@miladrahimi.com>
  */

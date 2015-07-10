@@ -1,11 +1,11 @@
-<?php namespace Neatplex\PHPCrypt;
+<?php namespace MiladRahimi\PHPCrypt;
 
 /**
  * Class PHPCryptException
  *
  * The main package exception
  *
- * @package Neatplex\PHPCrypt
+ * @package MiladRahimi\PHPCrypt
  *
  * @author Milad Rahimi <info@miladrahimi.com>
  */

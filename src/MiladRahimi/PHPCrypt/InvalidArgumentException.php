@@ -1,11 +1,11 @@
-<?php namespace Neatplex\PHPCrypt;
+<?php namespace MiladRahimi\PHPCrypt;
 
 /**
  * Class InvalidArgumentException
  *
  * Specified InvalidArgumentException exception for the package
  *
- * @package Neatplex\PHPCrypt
+ * @package MiladRahimi\PHPCrypt
  *
  * @author Milad Rahimi <info@miladrahimi.com>
  */

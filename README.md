@@ -28,10 +28,6 @@ and update your dependencies:
 ```
 php composer.phar update
 ```
-#### Using VendorLoader
-If you don't use Composer you may use [VendorLoader](https://github.com/miladrahimi/vendorloader).
-Copy `src` directory content in your application vendor directory,
-then include the `vendorloader.php` in your application.
 #### Manually
 You can use your own autoloader as long as it follows [PSR-0](http://www.php-fig.org/psr/psr-0) or
 [PSR-4](http://www.php-fig.org/psr/psr-4) standards.

@@ -1,4 +1,4 @@
-<?php namespace Neatplex\PHPCrypt;
+<?php namespace MiladRahimi\PHPCrypt;
 
 /**
  * Interface Password
@@ -7,7 +7,7 @@
  * The "hash()" API must hash the given password.
  * The "verify()" API must verify if the given password is hashed of given raw password.
  *
- * @package Neatplex\PHPRouter
+ * @package MiladRahimi\PHPRouter
  *
  * @author Milad Rahimi <info@miladrahimi.com>
  */

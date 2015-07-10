@@ -1,4 +1,4 @@
-<?php namespace Neatplex\PHPCrypt;
+<?php namespace MiladRahimi\PHPCrypt;
 
 /**
  * Class Crypt
@@ -6,7 +6,7 @@
  * Crypt class is the main package class.
  * This class encrypt and decrypt contents based on PHP native MCrypt package.
  *
- * @package Neatplex\PHPRouter
+ * @package MiladRahimi\PHPRouter
  *
  * @author Milad Rahimi <info@miladrahimi.com>
  */

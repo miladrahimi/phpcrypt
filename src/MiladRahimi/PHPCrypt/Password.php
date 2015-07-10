@@ -1,4 +1,4 @@
-<?php namespace Neatplex\PHPCrypt;
+<?php namespace MiladRahimi\PHPCrypt;
 
 /**
  * Class Password
@@ -6,7 +6,7 @@
  * Password class is used to work with passwords
  * It uses some features of MCrypt library.
  *
- * @package Neatplex\PHPRouter
+ * @package MiladRahimi\PHPRouter
  *
  * @author Milad Rahimi <info@miladrahimi.com>
  */
