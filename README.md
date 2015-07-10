@@ -4,7 +4,7 @@ Free PHP cryptography tools for neat and powerful projects!
 ## Documentation
 PHPCrypt is a tiny package for encrypting and decrypting data and hashing passwords.
 It uses PHP MCrypt extension.
-It is used to in [Neatplex](http://neatplex.com) packages.
+It is used to in [MiladRahimi](http://miladrahimi.com) packages.
 
 
 ### Installation
@@ -15,14 +15,14 @@ If you are not familiar with Composer, The article
 can be useful.
 After installing Composer, go to your project directory and run following command there:
 ```
-php composer.phar require neatplex/phpcrypt
+php composer.phar require miladrahimi/phpcrypt
 ```
 Or if you have `composer.json` file already in your application,
 you may add this package to your application requirements
 and update your dependencies:
 ```
 "require": {
-    "neatplex/phpcrypt": "~1.0"
+    "miladrahimi/phpcrypt": "~1.0"
 }
 ```
 ```
@@ -36,7 +36,7 @@ In this case you can put `src` directory content in your vendor directory.
 ### Getting Started
 It's so easy to work with!
 ```
-use Neatplex\PHPCrypt\Crypt;
+use MiladRahimi\PHPCrypt\Crypt;
 $crypt = new Crypt();
 echo $crypt->encrypt("This is the content!");
 ```
@@ -44,7 +44,7 @@ echo $crypt->encrypt("This is the content!");
 ### Encryption
 The `encrypt()` method encrypts data. See following example.
 ```
-use Neatplex\PHPCrypt\Crypt;
+use MiladRahimi\PHPCrypt\Crypt;
 $crypt = new Crypt();
 echo $crypt->encrypt("This is the content!");
 ```
@@ -56,7 +56,7 @@ aqxDpuiyuGbOI2JKz9krhUEzrbEPk9zmjcPXhMAx72EfBBjWOxhscwXRaL7OOjg5GDUxdanOQtmjbjtM
 ### Decryption
 The `decrypt()` method decrypts data. See following example.
 ```
-use Neatplex\PHPCrypt\Crypt;
+use MiladRahimi\PHPCrypt\Crypt;
 
 $crypt = new Crypt();
 $r = $crypt->encrypt("This is the content!");
@@ -71,7 +71,7 @@ To get the generated key, you can call `getKey()` method.
 To set your application key, you can call `setKey()` method.
 You should hold the application key in the project and use it whenever you use PHPCrypt APIs.
 ```
-use Neatplex\PHPCrypt\Crypt;
+use MiladRahimi\PHPCrypt\Crypt;
 
 $crypt = new Crypt();
 $crypt->setKey(" THIS IS THE SECRET KEY ");
@@ -113,7 +113,7 @@ $crypt->setCipherMode(MCRYPT_MODE_CFB);
 ### Password Hashing
 PHPCrypt provide easiest way to hash and verify password.
 ```
-use Neatplex\PHPCrypt\Password;
+use MiladRahimi\PHPCrypt\Password;
 
 $hashed_password = Password::hash("ddd");
 ```
@@ -122,7 +122,7 @@ $hashed_password = Password::hash("ddd");
 Once you hashed a password, you need to verify it next times.
 It's so easy as following examples illustrates:
 ```
-use Neatplex\PHPCrypt\Password;
+use MiladRahimi\PHPCrypt\Password;
 
 $r = Password::verify($user_input_password, $hashed_password);
 if($r) {
@@ -145,8 +145,8 @@ Here are methods and messages:
 *	[Milad Rahimi](http://miladrahimi.com)
 
 ## Official homepage
-*   [PHPCrypt](http://phpcrypt.neatplex.com) (Soon!)
+*   [PHPCrypt](http://miladrahimi.github.io/phpcrypt)
 
 ## License
-PHPCrypt is created by [Neatplex](http://neatplex.com)
+PHPCrypt is created by [MiladRahimi](http://miladrahimi.com)
 and released under the [MIT License](http://opensource.org/licenses/mit-license.php).
