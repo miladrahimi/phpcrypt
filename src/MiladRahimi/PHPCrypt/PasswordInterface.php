@@ -2,13 +2,11 @@
 
 /**
  * Interface Password
- *
  * PasswordInterface define "hash()" and "verify()" APIs.
  * The "hash()" API must hash the given password.
  * The "verify()" API must verify if the given password is hashed of given raw password.
  *
  * @package MiladRahimi\PHPRouter
- *
  * @author Milad Rahimi <info@miladrahimi.com>
  */
 interface PasswordInterface
@@ -26,10 +24,10 @@ interface PasswordInterface
     /**
      * Verify password
      *
-     * @param string $password
+     * @param string $raw_password
      * @param $hashed_password
      * @return string
      */
-    public static function verify($password, $hashed_password);
+    public static function verify($raw_password, $hashed_password);
 
 }

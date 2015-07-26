@@ -14,10 +14,6 @@ If you are not familiar with Composer, The article
 can be useful.
 After installing Composer, go to your project directory and run following command there:
 ```
-php composer.phar require miladrahimi/phpcrypt
-```
-Windows:
-```
 composer require miladrahimi/phpcrypt
 ```
 Or if you have `composer.json` file already in your application,
@@ -28,10 +24,6 @@ and update your dependencies:
     "miladrahimi/phpcrypt": "~1.0"
 }
 ```
-```
-php composer.phar update
-```
-Windows:
 ```
 composer update
 ```
@@ -44,6 +36,7 @@ In this case you can put `src` directory content in your vendor directory.
 It's so easy to work with!
 ```
 use MiladRahimi\PHPCrypt\Crypt;
+
 $crypt = new Crypt();
 echo $crypt->encrypt("This is the content!");
 ```
@@ -52,6 +45,7 @@ echo $crypt->encrypt("This is the content!");
 The `encrypt()` method encrypts data. See following example.
 ```
 use MiladRahimi\PHPCrypt\Crypt;
+
 $crypt = new Crypt();
 echo $crypt->encrypt("This is the content!");
 ```
@@ -92,7 +86,7 @@ PHP MCrypt extension supports multi ciphers and modes.
 In default, PHPCrypt uses `rijndael-256` cipher and `cbc` mode.
 To see all supported ciphers you can call following method:
 ```
-$crypt->supportedCipherNames();
+$crypt->supportedCipherAlgorithms();
 ```
 To see all supported modes call this method:
 ```
@@ -107,7 +101,7 @@ $crypt->supportedKeySizes();
 
 You can set another cipher with following method:
 ```
-$crypt->setCipherName(MCRYPT_TRIPLEDES);
+$crypt->setCipherAlgorithm(MCRYPT_TRIPLEDES);
 ```
 *   The default cipher is `MCRYPT_RIJNDAEL_256`.
 
@@ -131,7 +125,7 @@ It's so easy as following examples illustrates:
 ```
 use MiladRahimi\PHPCrypt\Password;
 
-$r = Password::verify($user_input_password, $hashed_password);
+$r = Password::verify($user_input_password, $stored_hashed_password);
 if($r) {
     echo "Signed in successfully!";
 } else {

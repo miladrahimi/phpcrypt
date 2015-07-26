@@ -2,11 +2,9 @@
 
 /**
  * Class PHPCryptException
- *
  * The main package exception
  *
  * @package MiladRahimi\PHPCrypt
- *
  * @author Milad Rahimi <info@miladrahimi.com>
  */
 class PHPCryptException extends \Exception {
