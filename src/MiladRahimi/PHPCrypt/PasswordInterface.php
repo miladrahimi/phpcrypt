@@ -2,9 +2,6 @@
 
 /**
  * Interface Password
- * PasswordInterface define "hash()" and "verify()" APIs.
- * The "hash()" API must hash the given password.
- * The "verify()" API must verify if the given password is hashed of given raw password.
  *
  * @package MiladRahimi\PHPRouter
  * @author Milad Rahimi <info@miladrahimi.com>
@@ -15,18 +12,19 @@ interface PasswordInterface
     /**
      * Hash password
      *
-     * @param $password
-     * @return string
-     * @internal param string $content
+     * @param string $password : Password to hash
+     * @return string : Hashed password
+     * @throws InvalidArgumentException
+     * @throws PHPCryptException
      */
     public static function hash($password);
 
     /**
      * Verify password
      *
-     * @param string $raw_password
-     * @param $hashed_password
-     * @return string
+     * @param string $raw_password : User input password
+     * @param string $hashed_password : Stored and hashed password
+     * @return bool : result
      */
     public static function verify($raw_password, $hashed_password);
 

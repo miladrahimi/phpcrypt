@@ -2,8 +2,7 @@
 
 /**
  * Class Crypt
- * Crypt class is the main package class.
- * This class encrypt and decrypt contents based on PHP native MCrypt package.
+ * Crypt class encrypts and decrypts contents using PHP native MCrypt package.
  *
  * @package MiladRahimi\PHPRouter
  * @author Milad Rahimi <info@miladrahimi.com>
@@ -30,9 +29,9 @@ class Crypt implements CryptInterface
     private $cipher_mode;
 
     /**
-     * Construct
+     * Constructor
      *
-     * @param string|null $key
+     * @param string|null $key : Cryptography key (salt)
      * @throws InvalidArgumentException
      * @throws PHPCryptException
      */
@@ -59,7 +58,6 @@ class Crypt implements CryptInterface
 
     /**
      * @param string $key
-     *
      * @throws InvalidArgumentException
      * @throws PHPCryptException
      */
@@ -68,15 +66,15 @@ class Crypt implements CryptInterface
         if (!isset($key) || !is_string($key))
             throw new InvalidArgumentException("Key must be a string value");
         if (!in_array(strlen($key), mcrypt_module_get_supported_key_sizes($this->cipher_algorithm)))
-            throw new PHPCryptException("Unsupported key size");
+            throw new PHPCryptException("Key size is not supported");
         $this->key = $key;
     }
 
     /**
      * Encrypt data
      *
-     * @param string $content
-     * @return string
+     * @param string $content : Content to encrypt
+     * @return string : Encrypted content
      * @throws InvalidArgumentException
      * @see http://goo.gl/ENz2sJ
      */

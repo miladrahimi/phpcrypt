@@ -7,6 +7,7 @@
  * @package MiladRahimi\PHPCrypt
  * @author Milad Rahimi <info@miladrahimi.com>
  */
-class PHPCryptException extends \Exception {
+class PHPCryptException extends \Exception
+{
     // Not implemented yet!
 }

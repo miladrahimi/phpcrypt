@@ -21,7 +21,7 @@ you may add this package to your application requirements
 and update your dependencies:
 ```
 "require": {
-    "miladrahimi/phpcrypt": "~1.0"
+    "miladrahimi/phpcrypt": "~1.6"
 }
 ```
 ```
@@ -142,7 +142,7 @@ Here are methods and messages:
 *   `Unsupported cipher mode` in `Crypt::setCipherMode()` when the given mode is not supported by current MCrypt version.
 *   `Unsupported key size` in `Crypt::setKey()` when the given key size is not supported by selected cipher.
 
-## Contributor
+## Contributors
 *	[Milad Rahimi](http://miladrahimi.com)
 
 ## Homepage

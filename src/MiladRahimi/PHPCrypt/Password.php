@@ -2,7 +2,7 @@
 
 /**
  * Class Password
- * Password class is used to work with passwords
+ * Password class hashes and verifies hashed passwords.
  * It uses some features of MCrypt library.
  *
  * @package MiladRahimi\PHPRouter
@@ -14,8 +14,8 @@ class Password implements PasswordInterface
     /**
      * Hash password
      *
-     * @param $password
-     * @return string
+     * @param string $password : Password to hash
+     * @return string : Hashed password
      * @throws InvalidArgumentException
      * @throws PHPCryptException
      */
@@ -31,9 +31,9 @@ class Password implements PasswordInterface
     /**
      * Verify password
      *
-     * @param string $raw_password
-     * @param $hashed_password
-     * @return string
+     * @param string $raw_password : User input password
+     * @param string $hashed_password : Stored and hashed password
+     * @return bool : result
      */
     public static function verify($raw_password, $hashed_password)
     {
