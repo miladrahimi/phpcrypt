@@ -1,10 +1,10 @@
-<?php namespace MiladRahimi\PHPCrypt;
+<?php namespace MiladRahimi\PhpCrypt;
 
 /**
  * Class InvalidArgumentException
  * Specified InvalidArgumentException exception for the package
  *
- * @package MiladRahimi\PHPCrypt
+ * @package MiladRahimi\PhpCrypt
  * @author Milad Rahimi <info@miladrahimi.com>
  */
 class InvalidArgumentException extends \InvalidArgumentException

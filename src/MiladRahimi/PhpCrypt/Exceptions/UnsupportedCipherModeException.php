@@ -1,10 +1,10 @@
-<?php namespace MiladRahimi\PHPCrypt\Exceptions;
+<?php namespace MiladRahimi\PhpCrypt\Exceptions;
 
 /**
  * Class UnsupportedCipherModeException
  * UnsupportedCipherModeException will be thrown when given cipher mode is not supported
  *
- * @package MiladRahimi\PHPCrypt\Exceptions
+ * @package MiladRahimi\PhpCrypt\Exceptions
  * @author  Milad Rahimi "info@miladrahimi.com"
  */
 class UnsupportedCipherModeException extends \Exception {

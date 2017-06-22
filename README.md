@@ -1,10 +1,10 @@
-# PHPCrypt
+# PhpCrypt
 Free PHP cryptography tools for neat and powerful projects!
 
 ## Documentation
 
 ### Overview
-PHPCrypt is a lightweight package for encrypting, decrypting, hashing and verifying data.
+PhpCrypt is a lightweight package for encrypting, decrypting, hashing and verifying data.
 It uses PHP MCrypt extension and crypt based on your project security key.
 You can provide a key for it, or a random key will be generated for you.
 
@@ -31,10 +31,10 @@ Just put `src` directory contents in your vendor directory.
 
 ### Getting Started
 
-It's so easy to work with PHPCrypt! Just take a look at following example:
+It's so easy to work with PhpCrypt! Just take a look at following example:
 
 ```
-use MiladRahimi\PHPCrypt\Crypt;
+use MiladRahimi\PhpCrypt\Crypt;
 
 $crypt = new Crypt();
 echo $crypt->encrypt("This is an important content!");
@@ -45,7 +45,7 @@ echo $crypt->encrypt("This is an important content!");
 The `encrypt()` method encrypts data. See following example.
 
 ```
-use MiladRahimi\PHPCrypt\Crypt;
+use MiladRahimi\PhpCrypt\Crypt;
 
 $crypt = new Crypt();
 echo $crypt->encrypt("This is an important content!");
@@ -58,14 +58,14 @@ aqxDpuiyuGbOI2JKz9krhUEzrbEPk9zmjcPXhMAx72EfBBjWOxhscwXRaL7OOjg5GDUxdanOQtmjbjtM
 ```
 
 * Encrypted data will be encoded via base64 algorithm to be maintainable easily anywhere.
-* PHPCrypt generates a key automatically when you don't set it.
+* PhpCrypt generates a key automatically when you don't set it.
 
 ### Decryption
 
 The `decrypt()` method decrypts data. See following example.
 
 ```
-use MiladRahimi\PHPCrypt\Crypt;
+use MiladRahimi\PhpCrypt\Crypt;
 
 $crypt = new Crypt();
 $r = $crypt->encrypt("This is an important content!");
@@ -82,7 +82,7 @@ This is an important content!
 
 ### Key
 
-PHPCrypt uses key to encrypt and decrypt data.
+PhpCrypt uses key to encrypt and decrypt data.
 You can pass this key to `Crypt` instances or it generates a random one.
 To get the generated key, you can call `getKey()` method.
 To set your project key, you can call `setKey()` method.
@@ -92,7 +92,7 @@ You must keep the key and use it for whole the project lifetime.
 Following example shows how to set the security key:
 
 ```
-use MiladRahimi\PHPCrypt\Crypt;
+use MiladRahimi\PhpCrypt\Crypt;
 
 $crypt = new Crypt();
 $crypt->setKey(" THIS IS THE SECRET KEY ");
@@ -106,7 +106,7 @@ echo $crypt->decrypt($r);
 
 Cyphers are algorithms to encrypt data.
 PHP MCrypt extension supports multi ciphers and modes.
-In default, PHPCrypt uses `rijndael-256` cipher and `cbc` mode.
+In default, PhpCrypt uses `rijndael-256` cipher and `cbc` mode.
 To see all supported ciphers you can call following method:
 
 ```
@@ -146,11 +146,11 @@ $crypt->setCipherMode(MCRYPT_MODE_CFB);
 
 ### Hashing
 
-PHPCrypt provides easiest way to hash and verify password or any other content.
+PhpCrypt provides easiest way to hash and verify password or any other content.
 See following example:
 
 ```
-use MiladRahimi\PHPCrypt\Password;
+use MiladRahimi\PhpCrypt\Password;
 
 $hashed_password = Hash::make("s3cr3t");
 ```
@@ -162,7 +162,7 @@ Once you hashed data (a password), you may need to verify it next times.
 It's so easy and following examples illustrates how to verify use password:
 
 ```
-use MiladRahimi\PHPCrypt\Password;
+use MiladRahimi\PhpCrypt\Password;
 
 $r = Hash::verify($user_input_password, $stored_hashed_password);
 if($r) {

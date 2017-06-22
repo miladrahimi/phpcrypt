@@ -1,9 +1,9 @@
-<?php namespace MiladRahimi\PHPCrypt\Exceptions;
+<?php namespace MiladRahimi\PhpCrypt\Exceptions;
 
 /**
  * Class InvalidArgumentException
  *
- * @package MiladRahimi\PHPCrypt\Exceptions
+ * @package MiladRahimi\PhpCrypt\Exceptions
  * @author  Milad Rahimi "info@miladrahimi.com"
  */
 class InvalidArgumentException extends \InvalidArgumentException {

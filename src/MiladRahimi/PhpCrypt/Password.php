@@ -1,4 +1,4 @@
-<?php namespace MiladRahimi\PHPCrypt;
+<?php namespace MiladRahimi\PhpCrypt;
 
 /**
  * Class Password
@@ -17,12 +17,12 @@ class Password implements PasswordInterface
      * @param string $password : Password to hash
      * @return string : Hashed password
      * @throws InvalidArgumentException
-     * @throws PHPCryptException
+     * @throws PhpCryptException
      */
     public static function hash($password)
     {
         if (!function_exists("mcrypt_encrypt"))
-            throw new PHPCryptException("MCrypt is not installed");
+            throw new PhpCryptException("MCrypt is not installed");
         if (!isset($password) || !is_scalar($password))
             throw new InvalidArgumentException("Password must be a string/scalar value");
         return $hash = crypt($password, '$2a$07$' . md5(mcrypt_create_iv(32)));

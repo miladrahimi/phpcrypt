@@ -1,10 +1,10 @@
-<?php namespace MiladRahimi\PHPCrypt;
+<?php namespace MiladRahimi\PhpCrypt;
 
-use MiladRahimi\PHPCrypt\Exceptions\InvalidArgumentException;
-use MiladRahimi\PHPCrypt\Exceptions\MCryptNotInstalledException;
-use MiladRahimi\PHPCrypt\Exceptions\UnsupportedCipherException;
-use MiladRahimi\PHPCrypt\Exceptions\UnsupportedCipherModeException;
-use MiladRahimi\PHPCrypt\Exceptions\UnsupportedKeySizeException;
+use MiladRahimi\PhpCrypt\Exceptions\InvalidArgumentException;
+use MiladRahimi\PhpCrypt\Exceptions\MCryptNotInstalledException;
+use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherException;
+use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherModeException;
+use MiladRahimi\PhpCrypt\Exceptions\UnsupportedKeySizeException;
 
 /**
  * Class Crypt

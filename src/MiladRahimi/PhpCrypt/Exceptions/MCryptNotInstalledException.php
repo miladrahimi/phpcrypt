@@ -1,10 +1,10 @@
-<?php namespace MiladRahimi\PHPCrypt\Exceptions;
+<?php namespace MiladRahimi\PhpCrypt\Exceptions;
 
 /**
  * Class MCryptNotInstalledException
  * MCryptNotInstalledException will be thrown when MCrypt extension is not installed
  *
- * @package MiladRahimi\PHPCrypt\Exceptions
+ * @package MiladRahimi\PhpCrypt\Exceptions
  * @author  Milad Rahimi "info@miladrahimi.com"
  */
 class MCryptNotInstalledException extends \Exception {

@@ -1,7 +1,7 @@
-<?php namespace MiladRahimi\PHPCrypt;
+<?php namespace MiladRahimi\PhpCrypt;
 
-use MiladRahimi\PHPCrypt\Exceptions\InvalidArgumentException;
-use MiladRahimi\PHPCrypt\Exceptions\MCryptNotInstalledException;
+use MiladRahimi\PhpCrypt\Exceptions\InvalidArgumentException;
+use MiladRahimi\PhpCrypt\Exceptions\MCryptNotInstalledException;
 
 /**
  * Class Hash

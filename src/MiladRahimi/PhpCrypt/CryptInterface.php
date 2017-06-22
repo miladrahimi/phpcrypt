@@ -1,14 +1,14 @@
-<?php namespace MiladRahimi\PHPCrypt;
+<?php namespace MiladRahimi\PhpCrypt;
 
-use MiladRahimi\PHPCrypt\Exceptions\UnsupportedCipherException;
-use MiladRahimi\PHPCrypt\Exceptions\UnsupportedCipherModeException;
-use MiladRahimi\PHPCrypt\Exceptions\UnsupportedKeySizeException;
+use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherException;
+use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherModeException;
+use MiladRahimi\PhpCrypt\Exceptions\UnsupportedKeySizeException;
 
 /**
  * Interface CryptInterface
  * Interface for encrypt and decrypt data
  *
- * @package MiladRahimi\PHPCrypt
+ * @package MiladRahimi\PhpCrypt
  * @author  Milad Rahimi "info@miladrahimi.com"
  */
 interface CryptInterface {

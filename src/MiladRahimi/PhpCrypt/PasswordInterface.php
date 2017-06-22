@@ -1,4 +1,4 @@
-<?php namespace MiladRahimi\PHPCrypt;
+<?php namespace MiladRahimi\PhpCrypt;
 
 /**
  * Interface Password
@@ -15,7 +15,7 @@ interface PasswordInterface
      * @param string $password : Password to hash
      * @return string : Hashed password
      * @throws InvalidArgumentException
-     * @throws PHPCryptException
+     * @throws PhpCryptException
      */
     public static function hash($password);
 
