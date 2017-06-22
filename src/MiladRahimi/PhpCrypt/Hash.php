@@ -1,7 +1,7 @@
 <?php namespace MiladRahimi\PhpCrypt;
 
 use MiladRahimi\PhpCrypt\Exceptions\InvalidArgumentException;
-use MiladRahimi\PhpCrypt\Exceptions\MCryptNotInstalledException;
+use MiladRahimi\PhpCrypt\Exceptions\OpenSSLNotInstalledException;
 
 /**
  * Class Hash
@@ -21,11 +21,11 @@ class Hash implements HashInterface {
      * @return string Hashed password
      *
      * @throws InvalidArgumentException
-     * @throws MCryptNotInstalledException
+     * @throws OpenSSLNotInstalledException
      */
     public static function make($password) {
         if (!function_exists("mcrypt_encrypt")) {
-            throw new MCryptNotInstalledException;
+            throw new OpenSSLNotInstalledException;
         }
         if (!isset($password) || !is_scalar($password)) {
             throw new InvalidArgumentException("Hash must be a string/scalar value");

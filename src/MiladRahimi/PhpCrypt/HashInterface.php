@@ -1,7 +1,7 @@
 <?php namespace MiladRahimi\PhpCrypt;
 
 use MiladRahimi\PhpCrypt\Exceptions\InvalidArgumentException;
-use MiladRahimi\PhpCrypt\Exceptions\MCryptNotInstalledException;
+use MiladRahimi\PhpCrypt\Exceptions\OpenSSLNotInstalledException;
 
 /**
  * Interface Hash
@@ -20,7 +20,7 @@ interface HashInterface {
      * @return string Hashed password
      *
      * @throws InvalidArgumentException
-     * @throws MCryptNotInstalledException
+     * @throws OpenSSLNotInstalledException
      */
     public static function make($password);
 

@@ -1,7 +1,7 @@
 <?php namespace MiladRahimi\PhpCrypt;
 
 use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherException;
-use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherModeException;
+use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
 use MiladRahimi\PhpCrypt\Exceptions\UnsupportedKeySizeException;
 
 /**
@@ -16,27 +16,27 @@ interface CryptInterface {
     /**
      * Encrypt data
      *
-     * @param string $content Content to encrypt
+     * @param string $plainText Content to encrypt
      *
      * @return string Encrypted content
      *
      * @throws UnsupportedCipherException
-     * @throws UnsupportedCipherModeException
+     * @throws CipherMethodNotSupportedException
      * @throws UnsupportedKeySizeException
      */
-    function encrypt($content);
+    function encrypt($plainText);
 
     /**
      * Decrypt Data
      *
-     * @param string $content
+     * @param string $ecryptedText
      *
      * @return bool|string
      *
      * @throws UnsupportedCipherException
-     * @throws UnsupportedCipherModeException
+     * @throws CipherMethodNotSupportedException
      * @throws UnsupportedKeySizeException
      */
-    function decrypt($content);
+    function decrypt($ecryptedText);
 
 }

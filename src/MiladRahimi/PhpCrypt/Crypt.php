@@ -1,205 +1,134 @@
-<?php namespace MiladRahimi\PhpCrypt;
-
-use MiladRahimi\PhpCrypt\Exceptions\InvalidArgumentException;
-use MiladRahimi\PhpCrypt\Exceptions\MCryptNotInstalledException;
-use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherException;
-use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherModeException;
-use MiladRahimi\PhpCrypt\Exceptions\UnsupportedKeySizeException;
-
+<?php
 /**
- * Class Crypt
- * Crypt class encrypts and decrypts contents using PHP native MCrypt package.
- *
- * @package MiladRahimi\PHPRouter
- * @author  Milad Rahimi "info@miladrahimi.com"
+ * Created by PhpStorm.
+ * User: Milad Rahimi <info@miladrahimi.com>
+ * Date: 6/23/2017
+ * Time: 12:26 AM
  */
-class Crypt implements CryptInterface {
 
+namespace MiladRahimi\PhpCrypt;
+
+use MiladRahimi\PhpCrypt\Exceptions\OpenSSLNotInstalledException;
+use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
+
+class Crypt implements CryptInterface
+{
     /**
-     * Crypt KEY
+     * Crypt key
      *
      * @var string
      */
     private $key;
 
     /**
-     * Cipher Algorithm
+     * Crypt Algorithm
      *
      * @var int
      */
-    private $cipher_algorithm;
-
-    /**
-     * @var int
-     */
-    private $cipher_mode;
+    private $method;
 
     /**
      * Constructor
      *
      * @param string|null $key Cryptography key (salt)
-     *
-     * @throws MCryptNotInstalledException
+     * @param int $method
+     * @throws OpenSSLNotInstalledException
      */
-    public function __construct($key = null) {
-        if (!function_exists("mcrypt_encrypt")) {
-            throw new MCryptNotInstalledException;
+    public function __construct($key = null, $method = OPENSSL_CIPHER_AES_256_CBC)
+    {
+        if (extension_loaded('openssl') == false) {
+            throw new OpenSSLNotInstalledException();
         }
-        if (!is_null($key) && !is_scalar($key)) {
-            throw new InvalidArgumentException("Key must be a string value");
+
+        if ($key == null) {
+            $key = self::generateRandomKey();
         }
-        $this->cipher_algorithm = MCRYPT_RIJNDAEL_256;
-        $this->cipher_mode      = MCRYPT_MODE_CBC;
-        $this->setKey((is_null($key) ? md5(mcrypt_create_iv(32)) : $key));
+
+        $this->setMethod($method);
+        $this->setKey($key);
     }
 
     /**
      * @return string
      */
-    public function getKey() {
+    public function getKey()
+    {
         return $this->key;
     }
 
     /**
      * @param string $key
-     *
-     * @throws InvalidArgumentException
      */
-    public function setKey($key) {
-        if (!isset($key) || !is_string($key)) {
-            throw new InvalidArgumentException("Key must be a string value");
-        }
+    public function setKey($key)
+    {
         $this->key = $key;
     }
 
     /**
-     * Encrypt data
+     * Encrypt text
      *
-     * @param string $content Content to encrypt
-     *
+     * @param string $plainText
      * @return string Encrypted content
-     *
-     * @throws UnsupportedCipherException
-     * @throws UnsupportedCipherModeException
-     * @throws UnsupportedKeySizeException
-     *
-     * @see http://goo.gl/ENz2sJ
      */
-    function encrypt($content) {
-        if (!isset($content) || !is_scalar($content)) {
-            throw new InvalidArgumentException("Content must be a scalar value");
-        }
-        if (!in_array(strlen($this->key), mcrypt_module_get_supported_key_sizes($this->cipher_algorithm))) {
-            throw new UnsupportedKeySizeException;
-        }
-        if (!in_array($this->cipher_algorithm, mcrypt_list_algorithms())) {
-            throw new UnsupportedCipherException;
-        }
-        if (!in_array($this->cipher_mode, mcrypt_list_modes())) {
-            throw new UnsupportedCipherModeException;
-        }
-        $iv_size = mcrypt_get_iv_size($this->cipher_algorithm, $this->cipher_mode);
-        $iv      = mcrypt_create_iv($iv_size);
-        $r       = mcrypt_encrypt($this->cipher_algorithm, $this->key, $content, $this->cipher_mode, $iv);
-        return base64_encode($iv . $r);
+    function encrypt($plainText)
+    {
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->key));
+        $encrypted = openssl_encrypt($plainText, $this->method, $this->key, OPENSSL_RAW_DATA, $iv);
+        return $encrypted . ':' . base64_encode($iv);
     }
 
     /**
-     * Decrypt Data
+     * Decrypt text
      *
-     * @param string $content
-     *
+     * @param string $encryptedText
      * @return bool|string
-     *
-     * @throws UnsupportedCipherException
-     * @throws UnsupportedCipherModeException
-     * @throws UnsupportedKeySizeException
-     *
-     * @see http://goo.gl/ENz2sJ
      */
-    function decrypt($content) {
-        if (!isset($content) || !is_scalar($content)) {
-            throw new InvalidArgumentException("Content must be a scalar value");
-        }
-        if (!in_array(strlen($this->key), mcrypt_module_get_supported_key_sizes($this->cipher_algorithm))) {
-            throw new UnsupportedKeySizeException;
-        }
-        if (!in_array($this->cipher_algorithm, mcrypt_list_algorithms())) {
-            throw new UnsupportedCipherException;
-        }
-        if (!in_array($this->cipher_mode, mcrypt_list_modes())) {
-            throw new UnsupportedCipherModeException;
-        }
-        $content = base64_decode($content);
-        $iv_size = mcrypt_get_iv_size($this->cipher_algorithm, $this->cipher_mode);
-        $iv      = substr($content, 0, $iv_size);
-        $ec      = substr($content, $iv_size);
-        return mcrypt_decrypt($this->cipher_algorithm, $this->key, $ec, $this->cipher_mode, $iv);
+    function decrypt($encryptedText)
+    {
+        $parts = explode(':', $encryptedText);
+        $main = $parts[0];
+        $iv = base64_decode($parts[1]);
+        return openssl_decrypt($main, $this->method, $this->key, OPENSSL_RAW_DATA, $iv);
     }
 
     /**
      * @return int
      */
-    public function getCipherAlgorithm() {
-        return $this->cipher_algorithm;
+    public function getMethod()
+    {
+        return $this->method;
     }
 
     /**
-     * @param int $cipher_algorithm
-     *
-     * @throws InvalidArgumentException
+     * @param int $method
+     * @throws CipherMethodNotSupportedException
      */
-    public function setCipherAlgorithm($cipher_algorithm) {
-        if (!isset($cipher_algorithm) || !is_scalar($cipher_algorithm)) {
-            throw new InvalidArgumentException("Cipher algorithm must be an int value");
+    public function setMethod($method)
+    {
+        if (in_array($method, openssl_get_cipher_methods()) == false) {
+            throw new CipherMethodNotSupportedException();
         }
-        $this->cipher_algorithm = $cipher_algorithm;
+
+        $this->method = $method;
     }
 
     /**
-     * @return int
-     */
-    public function getCipherMode() {
-        return $this->cipher_mode;
-    }
-
-    /**
-     * @param int $cipher_mode
-     *
-     * @throws InvalidArgumentException
-     */
-    public function setCipherMode($cipher_mode) {
-        if (!isset($cipher_mode) || !is_string($cipher_mode)) {
-            throw new InvalidArgumentException("Cipher type must be a string value");
-        }
-        $this->cipher_algorithm = $cipher_mode;
-    }
-
-    /**
-     * Return all supported key sizes for current cipher
+     * Return all supported cipher methods
      *
      * @return array
      */
-    public function supportedKeySizes() {
-        return mcrypt_module_get_supported_key_sizes($this->cipher_algorithm);
+    public static function methods()
+    {
+        return openssl_get_cipher_methods(true);
     }
 
     /**
-     * Return all supported ciphers
+     * Generate a random key
      *
-     * @return array
+     * @return string
      */
-    public function supportedCipherAlgorithms() {
-        return mcrypt_list_algorithms();
+    public static function generateRandomKey()
+    {
+        return bin2hex(openssl_random_pseudo_bytes(16));
     }
-
-    /**
-     * Return all supported cipher modes
-     *
-     * @return array
-     */
-    public function supportedCipherModes() {
-        return mcrypt_list_modes();
-    }
-
 }
