@@ -1,6 +1,6 @@
 {
     "name": "miladrahimi/phpcrypt",
-    "description": "Free PHP cryptography and hashing tools for neat and powerful projects!",
+    "description": "Free PHP encryption, decryption and hashing tools for neat and powerful projects!",
     "keywords": [
         "Cryptography ",
         "Encrypt",
@@ -10,7 +10,7 @@
         "Password",
         "Hash",
         "Verify",
-        "MCrypt"
+        "OpenSSL"
     ],
     "homepage": "http://miladrahimi.github.io",
     "type": "library",

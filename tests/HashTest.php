@@ -11,7 +11,6 @@ namespace MiladRahimi\PhpCrypt\Tests;
 require_once "bootstrap.php";
 
 use MiladRahimi\PhpCrypt\Hash;
-use MiladRahimi\PhpCrypt\HashGenerator;
 use PHPUnit\Framework\TestCase;
 
 class HashTest extends TestCase
