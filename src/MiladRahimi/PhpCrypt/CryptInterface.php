@@ -1,42 +1,31 @@
-<?php namespace MiladRahimi\PhpCrypt;
-
-use MiladRahimi\PhpCrypt\Exceptions\UnsupportedCipherException;
-use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
-use MiladRahimi\PhpCrypt\Exceptions\UnsupportedKeySizeException;
-
+<?php
 /**
- * Interface CryptInterface
- * Interface for encrypt and decrypt data
- *
- * @package MiladRahimi\PhpCrypt
- * @author  Milad Rahimi "info@miladrahimi.com"
+ * Created by PhpStorm.
+ * User: Milad Rahimi <info@miladrahimi.com>
+ * Date: 6/23/2017
+ * Time: 12:26 AM
  */
-interface CryptInterface {
 
+namespace MiladRahimi\PhpCrypt;
+
+use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
+
+interface CryptInterface
+{
     /**
-     * Encrypt data
+     * Encrypt text
      *
-     * @param string $plainText Content to encrypt
-     *
-     * @return string Encrypted content
-     *
-     * @throws UnsupportedCipherException
-     * @throws CipherMethodNotSupportedException
-     * @throws UnsupportedKeySizeException
+     * @param string $plainText
+     * @return string
      */
     function encrypt($plainText);
 
     /**
-     * Decrypt Data
+     * Decrypt text
      *
-     * @param string $ecryptedText
-     *
-     * @return bool|string
-     *
-     * @throws UnsupportedCipherException
-     * @throws CipherMethodNotSupportedException
-     * @throws UnsupportedKeySizeException
+     * @param string $encryptedText
+     * @return string
+     * @throws DecryptionException
      */
-    function decrypt($ecryptedText);
-
+    function decrypt($encryptedText);
 }

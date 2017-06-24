@@ -1,47 +1,52 @@
-<?php namespace MiladRahimi\PhpCrypt;
-
-use MiladRahimi\PhpCrypt\Exceptions\InvalidArgumentException;
-use MiladRahimi\PhpCrypt\Exceptions\OpenSSLNotInstalledException;
-
+<?php
 /**
- * Class Hash
- * Hash class hashes and verifies hashed data.
- * It uses some features of MCrypt library.
- *
- * @package MiladRahimi\PHPRouter
- * @author  Milad Rahimi "info@miladrahimi.com"
+ * Created by PhpStorm.
+ * User: Milad Rahimi <info@miladrahimi.com>
+ * Date: 6/24/2017
+ * Time: 9:31 PM
  */
-class Hash implements HashInterface {
+
+namespace MiladRahimi\PhpCrypt;
+
+class Hash
+{
+    /** @var HashGeneratorInterface $generator */
+    private static $generator = null;
 
     /**
-     * Hash password
-     *
-     * @param string $password Hash to hash
-     *
-     * @return string Hashed password
-     *
-     * @throws InvalidArgumentException
-     * @throws OpenSSLNotInstalledException
+     * Init
      */
-    public static function make($password) {
-        if (!function_exists("mcrypt_encrypt")) {
-            throw new OpenSSLNotInstalledException;
+    private static function init()
+    {
+        if (self::$generator == null) {
+            self::$generator = new HashGenerator();
         }
-        if (!isset($password) || !is_scalar($password)) {
-            throw new InvalidArgumentException("Hash must be a string/scalar value");
-        }
-        return $hash = crypt($password, '$2a$07$' . md5(mcrypt_create_iv(32)));
     }
 
     /**
-     * Verify password
+     * Hash input
      *
-     * @param string $raw_password    User input password
-     * @param string $hashed_password Stored and hashed password
+     * @param string $plainText
+     * @return string
+     */
+    public static function make($plainText)
+    {
+        self::init();
+
+        return self::$generator->make($plainText);
+    }
+
+    /**
+     * Verify input
      *
+     * @param string $plainText
+     * @param string $hashedText
      * @return bool result
      */
-    public static function verify($raw_password, $hashed_password) {
-        return crypt($raw_password, $hashed_password) == $hashed_password;
+    public static function verify($plainText, $hashedText)
+    {
+        self::init();
+
+        return self::$generator->verify($plainText, $hashedText);
     }
 }

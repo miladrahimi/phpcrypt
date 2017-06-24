@@ -8,38 +8,28 @@
 
 namespace MiladRahimi\PhpCrypt;
 
-use MiladRahimi\PhpCrypt\Exceptions\OpenSSLNotInstalledException;
+use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
 
 class Crypt implements CryptInterface
 {
-    /**
-     * Crypt key
-     *
-     * @var string
-     */
+    /** @var string $key */
     private $key;
 
-    /**
-     * Crypt Algorithm
-     *
-     * @var int
-     */
+    /** @var string $method */
     private $method;
+
+    /** @var int $options */
+    private $options = OPENSSL_RAW_DATA;
 
     /**
      * Constructor
      *
      * @param string|null $key Cryptography key (salt)
-     * @param int $method
-     * @throws OpenSSLNotInstalledException
+     * @param string $method
      */
-    public function __construct($key = null, $method = OPENSSL_CIPHER_AES_256_CBC)
+    public function __construct($key = null, $method = 'AES-256-CBC')
     {
-        if (extension_loaded('openssl') == false) {
-            throw new OpenSSLNotInstalledException();
-        }
-
         if ($key == null) {
             $key = self::generateRandomKey();
         }
@@ -68,27 +58,33 @@ class Crypt implements CryptInterface
      * Encrypt text
      *
      * @param string $plainText
-     * @return string Encrypted content
+     * @return string
      */
     function encrypt($plainText)
     {
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->key));
-        $encrypted = openssl_encrypt($plainText, $this->method, $this->key, OPENSSL_RAW_DATA, $iv);
-        return $encrypted . ':' . base64_encode($iv);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->method));
+        $encrypted = openssl_encrypt($plainText, $this->method, $this->key, $this->options, $iv);
+        return base64_encode($encrypted) . ':' . base64_encode($iv);
     }
 
     /**
      * Decrypt text
      *
      * @param string $encryptedText
-     * @return bool|string
+     * @return string
+     * @throws DecryptionException
      */
     function decrypt($encryptedText)
     {
         $parts = explode(':', $encryptedText);
-        $main = $parts[0];
+
+        if (count($parts) != 2) {
+            throw new DecryptionException();
+        }
+
+        $main = base64_decode($parts[0]);
         $iv = base64_decode($parts[1]);
-        return openssl_decrypt($main, $this->method, $this->key, OPENSSL_RAW_DATA, $iv);
+        return openssl_decrypt($main, $this->method, $this->key, $this->options, $iv);
     }
 
     /**
@@ -117,7 +113,7 @@ class Crypt implements CryptInterface
      *
      * @return array
      */
-    public static function methods()
+    public static function availableMethods()
     {
         return openssl_get_cipher_methods(true);
     }
@@ -130,5 +126,21 @@ class Crypt implements CryptInterface
     public static function generateRandomKey()
     {
         return bin2hex(openssl_random_pseudo_bytes(16));
+    }
+
+    /**
+     * @return int
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param int $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
     }
 }

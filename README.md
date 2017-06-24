@@ -152,7 +152,7 @@ See following example:
 ```
 use MiladRahimi\PhpCrypt\Password;
 
-$hashed_password = Hash::make("s3cr3t");
+$hashed_password = HashGenerator::make("s3cr3t");
 ```
 
 ### Verifying
@@ -164,7 +164,7 @@ It's so easy and following examples illustrates how to verify use password:
 ```
 use MiladRahimi\PhpCrypt\Password;
 
-$r = Hash::verify($user_input_password, $stored_hashed_password);
+$r = HashGenerator::verify($user_input_password, $stored_hashed_password);
 if($r) {
     // Sign in...
     echo "Signed in successfully!";

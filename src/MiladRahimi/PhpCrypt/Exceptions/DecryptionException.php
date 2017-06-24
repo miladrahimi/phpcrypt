@@ -2,13 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: Milad Rahimi <info@miladrahimi.com>
- * Date: 6/23/2017
- * Time: 12:26 AM
+ * Date: 6/24/2017
+ * Time: 8:26 PM
  */
 
 namespace MiladRahimi\PhpCrypt\Exceptions;
 
-class OpenSSLNotInstalledException extends \Exception
+class DecryptionException extends \Exception
 {
     //
 }
