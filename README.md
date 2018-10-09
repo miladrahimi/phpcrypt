@@ -1,6 +1,6 @@
 # PhpCrypt
 
-Free PHP encryption, decryption and hashing tools for neat and powerful projects!
+Cryptography tools for PHP projects
 
 ## Documentation
 
