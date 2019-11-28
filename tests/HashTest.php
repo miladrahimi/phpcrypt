@@ -1,37 +1,32 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Milad Rahimi <info@miladrahimi.com>
- * Date: 6/22/2017
- * Time: 2:03 PM
- */
 
 namespace MiladRahimi\PhpCrypt\Tests;
 
-require_once "bootstrap.php";
-
+use MiladRahimi\PhpCrypt\Exceptions\HashingException;
 use MiladRahimi\PhpCrypt\Hash;
 use PHPUnit\Framework\TestCase;
 
 class HashTest extends TestCase
 {
-    public function test_a_simple_hashing_and_verifying()
+    /**
+     * @throws HashingException
+     */
+    public function test_make_and_verify_secret_hash()
     {
-        $plainText = 'Metallica - Nothing Else Matters';
-
-        $hashedText = Hash::make($plainText);
-        $verification = Hash::verify($plainText, $hashedText);
-
-        $this->assertTrue($verification);
+        $hash = new Hash();
+        $hashed = $hash->make('secret');
+        $this->assertTrue($hash->verify('secret', $hashed));
     }
 
-    public function test_a_simple_hashing_and_verifying_with_empty_plain_text()
+    /**
+     * @throws HashingException
+     */
+    public function test_make_and_verify_a_random_hash()
     {
-        $plainText = '';
+        $plain = md5(mt_rand(1, 999999));
 
-        $hashedText = Hash::make($plainText);
-        $verification = Hash::verify($plainText, $hashedText);
-
-        $this->assertTrue($verification);
+        $hash = new Hash();
+        $hashed = $hash->make($plain);
+        $this->assertTrue($hash->verify($plain, $hashed));
     }
 }

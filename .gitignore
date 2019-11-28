@@ -1,4 +1,3 @@
-# Created by .ignore support plugin (hsz.mobi)
-.idea
-vendor
-composer.lock
+/.idea
+/vendor
+/composer.lock

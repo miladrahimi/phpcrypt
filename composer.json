@@ -1,42 +1,43 @@
 {
-    "name": "miladrahimi/phpcrypt",
-    "description": "Free PHP encryption, decryption and hashing tools for neat and powerful projects!",
-    "keywords": [
-        "Cryptography ",
-        "Encrypt",
-        "Decrypt",
-        "Encipher",
-        "Decipher",
-        "Password",
-        "Hash",
-        "Verify",
-        "OpenSSL"
-    ],
-    "homepage": "http://miladrahimi.github.io",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Milad Rahimi",
-            "email": "info@miladrahimi.com",
-            "homepage": "http://miladrahimi.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "info@miladrahimi.com",
-        "source": "https://github.com/miladrahimi/phpcrypt/issues"
-    },
-    "require": {
-        "php": ">=5.4.0",
-        "ext-openssl": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "MiladRahimi\\": "src/MiladRahimi/"
-        }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.*"
+  "name": "miladrahimi/phpcrypt",
+  "description": "Encryption, decryption, and hashing tools for PHP projects",
+  "keywords": [
+    "Crypt",
+    "Cryptography",
+    "Encrypt",
+    "Decrypt",
+    "Hash",
+    "Hash",
+    "OpenSSL",
+    "RSA",
+    "AES"
+  ],
+  "homepage": "http://miladrahimi.github.io",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Milad Rahimi",
+      "email": "info@miladrahimi.com",
+      "homepage": "http://miladrahimi.com",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "email": "info@miladrahimi.com",
+    "source": "https://github.com/miladrahimi/phpcrypt/issues"
+  },
+  "require": {
+    "php": ">=7.1",
+    "ext-openssl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "MiladRahimi\\PhpCrypt\\": "src/",
+      "MiladRahimi\\PhpCrypt\\Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "7.*"
+  }
 }
