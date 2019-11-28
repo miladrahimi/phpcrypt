@@ -7,6 +7,7 @@ use MiladRahimi\PhpCrypt\Base64\SafeBase64Parser;
 use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
 use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
+use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 
 class Symmetric
 {
@@ -73,11 +74,12 @@ class Symmetric
      * @param string $encryptedData
      * @return string
      * @throws DecryptionException
+     * @throws InvalidKeyException
      */
     public function decrypt(string $encryptedData): string
     {
         if (empty($this->key)) {
-            throw new DecryptionException('The key is not set.');
+            throw new InvalidKeyException('The key is not set.');
         }
 
         $parts = explode(':', $encryptedData);

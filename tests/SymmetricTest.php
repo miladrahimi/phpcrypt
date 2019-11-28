@@ -6,14 +6,17 @@ use MiladRahimi\PhpCrypt\Base64\SafeBase64Parser;
 use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
 use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
+use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 use MiladRahimi\PhpCrypt\Symmetric;
+use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 
 class SymmetricTest extends TestCase
 {
     /**
-     * @throws EncryptionException
      * @throws DecryptionException
+     * @throws EncryptionException
+     * @throws InvalidKeyException
      */
     public function test_encrypt_and_decrypt_without_key_and_iv()
     {
@@ -24,8 +27,9 @@ class SymmetricTest extends TestCase
     }
 
     /**
-     * @throws EncryptionException
      * @throws DecryptionException
+     * @throws EncryptionException
+     * @throws InvalidKeyException
      */
     public function test_encrypt_and_decrypt_with_custom_key()
     {
@@ -37,8 +41,9 @@ class SymmetricTest extends TestCase
     }
 
     /**
-     * @throws EncryptionException
      * @throws DecryptionException
+     * @throws EncryptionException
+     * @throws InvalidKeyException
      */
     public function test_encrypt_and_decrypt_with_custom_iv()
     {
@@ -47,6 +52,30 @@ class SymmetricTest extends TestCase
         $result = $symmetric->encrypt('secret');
 
         $this->assertEquals('secret', $symmetric->decrypt($result));
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws InvalidKeyException
+     */
+    public function test_decrypt_without_key_it_should_fail()
+    {
+        $symmetric = new Symmetric();
+        $this->expectException(InvalidKeyException::class);
+        $symmetric->decrypt('Something');
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws InvalidKeyException
+     */
+    public function test_decrypt_without_invalid_data_it_should_fail()
+    {
+        $symmetric = new Symmetric();
+        $symmetric->generateKey();
+
+        $this->expectException(DecryptionException::class);
+        $symmetric->decrypt('Invalid Data');
     }
 
     public function test_set_and_get_options()
@@ -100,5 +129,15 @@ class SymmetricTest extends TestCase
         $method = $symmetric->supportedMethods()[0];
         $symmetric->setMethod($method);
         $this->assertEquals($method, $symmetric->getMethod());
+    }
+
+    /**
+     * @throws CipherMethodNotSupportedException
+     */
+    public function test_set_invalid_method_it_should_fail()
+    {
+        $symmetric = new Symmetric();
+        $this->expectException(CipherMethodNotSupportedException::class);
+        $symmetric->setMethod('Invalid Method');
     }
 }
