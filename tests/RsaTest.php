@@ -66,6 +66,6 @@ class RsaTest extends TestCase
         $key = __DIR__ . '/../resources/test_public_key.pem';
         $rsa->setPublicKey($key);
 
-        $this->assertTrue();
+        $this->assertTrue(true);
     }
 }
