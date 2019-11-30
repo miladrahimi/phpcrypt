@@ -90,4 +90,24 @@ class RsaTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    /**
+     * @throws InvalidKeyException
+     */
+    public function test_set_and_get_invalid_public_key_it_should_fail()
+    {
+        $rsa = $this->rsa();
+        $this->expectException(InvalidKeyException::class);
+        $rsa->setPublicKey('invalid.pem');
+    }
+
+    /**
+     * @throws InvalidKeyException
+     */
+    public function test_set_and_get_invalid_private_key_it_should_fail()
+    {
+        $rsa = $this->rsa();
+        $this->expectException(InvalidKeyException::class);
+        $rsa->setPrivateKey('invalid.pem');
+    }
 }

@@ -17,7 +17,7 @@ class SymmetricTest extends TestCase
      */
     public function test_encrypt_and_decrypt_without_key_and_iv()
     {
-        $symmetric = new Symmetric();
+        $symmetric = new Symmetric(null);
         $result = $symmetric->encrypt('secret');
 
         $this->assertEquals('secret', $symmetric->decrypt($result));
