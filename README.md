@@ -1,143 +1,99 @@
+[![Latest Stable Version](https://poser.pugx.org/miladrahimi/phpcrypt/v/stable)](https://packagist.org/packages/miladrahimi/phpcrypt)
+[![Total Downloads](https://poser.pugx.org/miladrahimi/phpcrypt/downloads)](https://packagist.org/packages/miladrahimi/phpcrypt)
+[![Build Status](https://travis-ci.org/miladrahimi/phpcrypt.svg?branch=master)](https://travis-ci.org/miladrahimi/phpcrypt)
+[![Coverage Status](https://coveralls.io/repos/github/miladrahimi/phpcrypt/badge.svg?branch=master)](https://coveralls.io/github/miladrahimi/phpcrypt?branch=master)
+[![License](https://poser.pugx.org/miladrahimi/phpcrypt/license)](https://packagist.org/packages/miladrahimi/phpcrypt)
+
 # PhpCrypt
 
-Cryptography tools for PHP projects
+PhpCrypt is a package for encryption, decryption, and password hashing in PHP projects. It hides complexity and provides an easy-to-use and fluent interface.
 
-## Documentation
+Features:
+* Symmetric encryption/decryption using AES and other symmetric methods.
+* Asymmetric encryption/decryption using the RSA method.
+* Hashing and verifying passwords using the Bcrypt method.
 
-### Overview
+## Versions
 
-PhpCrypt is a lightweight package for **encrypting**, **decrypting**, **hashing** and verifying data.
-It uses PHP OpenSSL extension and let's you to use your custom security key.
+* **v4.x.x (LTS)**
+* v3.x.x (Unsupported)
+* v2.x.x (Unsupported)
+* v1.x.x (Unsupported)
 
-### Installation (via Composer)
+## Installation
 
-Run following command in your project root directory:
+Install [Composer](https://getcomposer.org) and run following command in your project's root directory:
 
-```
-composer require miladrahimi/phpcrypt:3.*
-```
-
-### Getting Started
-
-It's so easy to work with PhpCrypt! Just take a look at following example:
-
-```
-use MiladRahimi\PhpCrypt\Crypt;
-
-$crypt = new Crypt();
-echo $crypt->encrypt("This is an important content!");
+```bash
+composer require miladrahimi/phpcrypt "4.*"
 ```
 
-### Encryption
+## Symmetric encryption
 
-The `encrypt()` method encrypts data. See following example.
+Symmetric methods use only one key to both encrypt and decrypt data. To use symmetric methods, take a look at this example:
 
-```
-use MiladRahimi\PhpCrypt\Crypt;
+```php
+use MiladRahimi\PhpCrypt\Symmetric;
 
-$crypt = new Crypt();
-echo $crypt->encrypt("This is an important content!");
-```
-
-* Encrypted data will be encoded via base64 algorithm to be maintainable easily anywhere.
-* PhpCrypt would generate a key automatically when there was not anyone.
-
-### Decryption
-
-The `decrypt()` method decrypts data. See following example.
-
-```
-use MiladRahimi\PhpCrypt\Crypt;
-
-$crypt = new Crypt();
-$r = $crypt->encrypt("This is an important content!");
-echo $crypt->decrypt($r);
+$symmetric = new Symmetric();
+$result = $symmetric->encrypt('secret');
+echo $symmetric->decrypt($result); // Output: secret
 ```
 
-*   Don't forget to set the same key you have used to encrypting the data.
+It generates a random key and selects `aes-256-cbc` as the method for further encryptions/decryptions.
 
-### Key
+### Custom Key
 
-PhpCrypt uses a secret key to encrypt and decrypt data.
-You can pass this key to `Crypt` instances or let it to generates a random one.
-To get the generated key, you can call `getKey()` method.
-To set your custom key, you can call `setKey()` method or pass it via constructor.
+If you have already a key, you can use it for encryption./decryption this way:
 
-You must keep the key and use it for whole the project lifetime.
+```php
+use MiladRahimi\PhpCrypt\Symmetric;
 
-Following examples show how to set the security key with constructor and setter respectively:
-
-```
-use MiladRahimi\PhpCrypt\Crypt;
-
-$crypt = new Crypt(" THIS IS THE SECRET KEY ");
-$r = $crypt->encrypt("This is the content!");
-echo $crypt->decrypt($r);
+$key = '1234567890123456';
+$symmetric = new Symmetric($key);
 ```
 
-```
-use MiladRahimi\PhpCrypt\Crypt;
-
-$crypt = new Crypt();
-$crypt->setKey(" THIS IS THE SECRET KEY ");
-$r = $crypt->encrypt("This is the content!");
-echo $crypt->decrypt($r);
-```
-
-*   Default cipher method is `AES-256-CBC`.
-
-### Cipher Methods
-
-Cypher methods are algorithms to encrypt data.
-PHP OpenSSL extension supports multi cipher methods.
-In default, PhpCrypt uses `AES-256-CBC` method.
-To see all supported cipher methods you can call following method:
+You can generate a new key using `Symmetric` class like this:
 
 ```
-$crypt->availableMethods();
+$key = $symmetric->generateKey();
 ```
 
-To set your desired cipher method, use following method:
+### Custom method
 
-```
-$crypt->setMethod('AES-192-CBC');
-```
+In default, The `Symmetric` class use `aes-256-cbc` as the encryption method. You can pass another method to the class constructor this way:
 
-### Hashing
+```php
+use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
+use MiladRahimi\PhpCrypt\Symmetric;
 
-PhpCrypt provides easiest way to hash and verify passwords or any other contents.
-See following example:
-
-```
-use MiladRahimi\PhpCrypt\Hash;
-
-$hashed_password = Hash::make("s3cr3t");
-```
-
-### Verifying
-
-Once you hashed a data (password), you may need to verify it next times.
-
-It's so easy, following examples illustrates how to verify hashed data:
-
-```
-use MiladRahimi\PhpCrypt\Hash;
-
-$r = Hash::verify($user_input_password, $stored_hashed_password);
-
-if($r) {
-    // Sign in...
-    echo "Signed in successfully!";
-} else {
-    echo "The password you entered is wrong";
+try {
+    $symmetric = new Symmetric('YOUR-KEY', 'aria-256-ctr');
+} catch (MethodNotSupportedException $e) {
+    // You method is not supported.
 }
 ```
 
-### Framework Integration
+If you still like to have an auto-generated key, pass null as the first argument.
 
-You can install the package using Composer.
-While all of modern PHP frameworks supports Composer packages,
-you are able to use it in the most of popular frameworks easily.
+```php
+use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
+use MiladRahimi\PhpCrypt\Symmetric;
 
-## License
-This package is released under the [MIT License](http://opensource.org/licenses/mit-license.php).
+try {
+    $symmetric = new Symmetric(null, 'aria-256-ctr');
+} catch (MethodNotSupportedException $e) {
+    // You method is not supported.
+}
+```
+
+### Supported Methods
+
+If you want to know which methods are currently supported by your installed OpenSSL extension, see the snippet below:
+
+```
+use MiladRahimi\PhpCrypt\Symmetric;
+
+$symmetric = new Symmetric();
+print_r($symmetric->supportedMethods());
+```
