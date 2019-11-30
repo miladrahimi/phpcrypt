@@ -17,7 +17,7 @@ class Symmetric
     /**
      * @var string
      */
-    private $method = 'aes-256-cbc';
+    private $method;
 
     /**
      * @var string
