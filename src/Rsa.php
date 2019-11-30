@@ -2,86 +2,93 @@
 
 namespace MiladRahimi\PhpCrypt;
 
-use MiladRahimi\PhpCrypt\Base64\Base64Parser;
-use MiladRahimi\PhpCrypt\Base64\SafeBase64Parser;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 
+/**
+ * Class Rsa
+ * It encrypts/decrypts data using RSA method
+ *
+ * @package MiladRahimi\PhpCrypt
+ */
 class Rsa
 {
     /**
-     * @var string
+     * @var resource
      */
     private $publicKey;
 
     /**
-     * @var string
+     * @var resource
      */
     private $privateKey;
 
     /**
-     * @var Base64Parser
-     */
-    private $base64Parser;
-
-    /**
      * Rsa constructor.
      *
-     * @param string $privateKey
-     * @param string $publicKey
-     * @param Base64Parser|null $base64Parser
+     * @param string $privateKey The key file path or content
+     * @param string $publicKey The key file path or content
      * @throws InvalidKeyException
      */
-    public function __construct(string $privateKey, string $publicKey, Base64Parser $base64Parser = null)
+    public function __construct(string $privateKey, string $publicKey)
     {
         $this->setPrivateKey($privateKey);
         $this->setPublicKey($publicKey);
-        $this->setBase64Parser($base64Parser ?: new SafeBase64Parser());
     }
 
     /**
      * Encrypt the given plain data
+     * It uses a private key to encrypt the plain data.
+     * The encrypted data will be decrypted only with the related public key.
      *
-     * @param string $data
+     * @param string $plain
+     * @param bool $base64
      * @return string
      * @throws EncryptionException
      */
-    public function encryptWithPrivate(string $data): string
+    public function encryptWithPrivate(string $plain, bool $base64 = true): string
     {
         $encrypted = '';
-        if (openssl_private_encrypt($data, $encrypted, $this->privateKey) == false) {
+        if (openssl_private_encrypt($plain, $encrypted, $this->privateKey) == false) {
             throw new EncryptionException(openssl_error_string());
         }
 
-        return $encrypted;
+        return $base64 ? base64_encode($encrypted) : $encrypted;
     }
 
     /**
      * Encrypt the given plain data
+     * It uses a public key to encrypt the plain data.
+     * The encrypted data will be decrypted only with the related private key.
      *
-     * @param string $data
+     * @param string $plain
+     * @param bool $base64
      * @return string
      * @throws EncryptionException
      */
-    public function encryptWithPublic(string $data): string
+    public function encryptWithPublic(string $plain, bool $base64 = true): string
     {
         $encrypted = '';
-        if (openssl_public_encrypt($data, $encrypted, $this->publicKey) == false) {
+        if (openssl_public_encrypt($plain, $encrypted, $this->publicKey) == false) {
             throw new EncryptionException(openssl_error_string());
         }
 
-        return $encrypted;
+        return $base64 ? base64_encode($encrypted) : $encrypted;
     }
 
     /**
-     * Decrypt the given plain data
+     * Decrypt the given encrypted data
+     * It uses the public key to decrypt the given encrypted data.
      *
      * @param string $data
+     * @param bool $base64
      * @return string
      * @throws EncryptionException
      */
-    public function decryptWithPublic(string $data): string
+    public function decryptWithPublic(string $data, bool $base64 = true): string
     {
+        $data = $base64 ? base64_decode($data) : $data;
+
         $decrypted = '';
         if (openssl_public_decrypt($data, $decrypted, $this->publicKey) == false) {
             throw new EncryptionException(openssl_error_string());
@@ -91,14 +98,18 @@ class Rsa
     }
 
     /**
-     * Decrypt the given plain data
+     * Decrypt the given encrypted data
+     * It uses the private key to decrypt the given encrypted data.
      *
      * @param string $data
+     * @param bool $base64
      * @return string
      * @throws EncryptionException
      */
-    public function decryptWithPrivate(string $data): string
+    public function decryptWithPrivate(string $data, bool $base64 = true): string
     {
+        $data = $base64 ? base64_decode($data) : $data;
+
         $decrypted = '';
         if (openssl_private_decrypt($data, $decrypted, $this->privateKey) == false) {
             throw new EncryptionException(openssl_error_string());
@@ -108,38 +119,20 @@ class Rsa
     }
 
     /**
-     * @return Base64Parser
-     */
-    public function getBase64Parser(): Base64Parser
-    {
-        return $this->base64Parser;
-    }
-
-    /**
-     * @param Base64Parser $base64Parser
-     */
-    public function setBase64Parser(Base64Parser $base64Parser): void
-    {
-        $this->base64Parser = $base64Parser;
-    }
-
-    /**
-     * @param string $publicKey
+     * @param string $publicKey The key file path or content
      * @throws InvalidKeyException
      */
     public function setPublicKey(string $publicKey): void
     {
         if (file_exists($publicKey)) {
-            if (is_readable($publicKey)) {
-                $this->publicKey = openssl_pkey_get_public(file_get_contents($publicKey));
-                if ($this->publicKey === false) {
-                    throw new InvalidKeyException(openssl_error_string());
-                }
-            } else {
-                throw new InvalidKeyException('The public key file is not readable.');
+            if (!is_readable($publicKey) || !($publicKey = file_get_contents($publicKey))) {
+                throw new InvalidKeyException('The private key file is not readable.');
             }
-        } else {
-            throw new InvalidKeyException('The public key file is not found.');
+        }
+
+        $this->publicKey = openssl_pkey_get_public($publicKey);
+        if ($this->publicKey === false) {
+            throw new InvalidKeyException(openssl_error_string());
         }
     }
 
@@ -151,16 +144,14 @@ class Rsa
     public function setPrivateKey(string $privateKey, string $passphrase = ''): void
     {
         if (file_exists($privateKey)) {
-            if (is_readable($privateKey)) {
-                $this->privateKey = openssl_pkey_get_private(file_get_contents($privateKey), $passphrase);
-                if ($this->privateKey === false) {
-                    throw new InvalidKeyException(openssl_error_string());
-                }
-            } else {
+            if (!is_readable($privateKey) || !($privateKey = file_get_contents($privateKey))) {
                 throw new InvalidKeyException('The private key file is not readable.');
             }
-        } else {
-            throw new InvalidKeyException('The private key file is not found.');
+        }
+
+        $this->privateKey = openssl_pkey_get_private($privateKey, $passphrase);
+        if ($this->privateKey === false) {
+            throw new InvalidKeyException(openssl_error_string());
         }
     }
 }

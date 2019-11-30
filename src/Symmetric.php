@@ -2,13 +2,16 @@
 
 namespace MiladRahimi\PhpCrypt;
 
-use MiladRahimi\PhpCrypt\Base64\Base64Parser;
-use MiladRahimi\PhpCrypt\Base64\SafeBase64Parser;
-use MiladRahimi\PhpCrypt\Exceptions\CipherMethodNotSupportedException;
+use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
 use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
-use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 
+/**
+ * Class Symmetric
+ * It encrypts/decrypts data using symmetric key methods
+ *
+ * @package MiladRahimi\PhpCrypt
+ */
 class Symmetric
 {
     /**
@@ -19,31 +22,20 @@ class Symmetric
     /**
      * @var string
      */
-    private $iv;
-
-    /**
-     * @var string
-     */
     private $key;
 
     /**
-     * @var int
-     */
-    private $options = 0;
-
-    /**
-     * @var Base64Parser
-     */
-    private $base64Parser;
-
-    /**
      * Symmetric constructor.
+     * It auto-generates the key if given one is null
      *
-     * @param Base64Parser|null $base64Parser
+     * @param string $method
+     * @param string|null $key
+     * @throws MethodNotSupportedException
      */
-    public function __construct(Base64Parser $base64Parser = null)
+    public function __construct(?string $key = null, string $method = 'aes-256-cbc')
     {
-        $this->setBase64Parser($base64Parser ?: new SafeBase64Parser());
+        $this->setKey($key ?: $this->generateKey());
+        $this->setMethod($method);
     }
 
     /**
@@ -55,42 +47,34 @@ class Symmetric
      */
     public function encrypt(string $plain): string
     {
-        $this->prepare();
+        $iv = $this->generateIv();
 
-        $encrypted = openssl_encrypt($plain, $this->method, $this->key, $this->options, $this->iv);
+        $encrypted = openssl_encrypt($plain, $this->method, $this->key, 0, $iv);
         if ($encrypted === false) {
             throw new EncryptionException(openssl_error_string());
         }
 
-        return join(':', [
-            $this->base64Parser->encode($this->iv),
-            $this->base64Parser->encode($encrypted),
-        ]);
+        return join('.', [base64_encode($iv), base64_encode($encrypted)]);
     }
 
     /**
      * Decrypt the given encrypted data
      *
-     * @param string $encryptedData
+     * @param string $data
      * @return string
      * @throws DecryptionException
-     * @throws InvalidKeyException
      */
-    public function decrypt(string $encryptedData): string
+    public function decrypt(string $data): string
     {
-        if (empty($this->key)) {
-            throw new InvalidKeyException('The key is not set.');
-        }
-
-        $parts = explode(':', $encryptedData);
+        $parts = explode('.', $data);
         if (count($parts) != 2) {
             throw new DecryptionException('Encrypted data is in invalid format.');
         }
 
-        $iv = $this->base64Parser->decode($parts[0]);
-        $encryptedPayload = $this->base64Parser->decode($parts[1]);
+        $iv = base64_decode($parts[0]);
+        $encryptedPayload = base64_decode($parts[1]);
 
-        $plain = openssl_decrypt($encryptedPayload, $this->method, $this->key, $this->options, $iv);
+        $plain = openssl_decrypt($encryptedPayload, $this->method, $this->key, 0, $iv);
         if ($plain === false) {
             throw new DecryptionException(openssl_error_string());
         }
@@ -101,61 +85,32 @@ class Symmetric
     /**
      * Generate a random key
      *
+     * @param int $size
      * @return string
      */
-    public function generateKey(): string
+    public function generateKey(int $size = 256): string
     {
-        return $this->key = bin2hex(openssl_random_pseudo_bytes(32));
+        return openssl_random_pseudo_bytes($size / 8);
     }
 
     /**
-     * Generate a random key
+     * Generate a random IV
      *
      * @return string
      */
-    public function generateIv(): string
+    private function generateIv(): string
     {
-        return $this->iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->method));
+        return openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->method));
     }
 
     /**
-     * Return all supported cipher methods
+     * Return all the supported cipher methods
      *
      * @return array
      */
     public function supportedMethods(): array
     {
         return openssl_get_cipher_methods(true);
-    }
-
-    /**
-     * Initialize the key and iv if not set
-     */
-    private function prepare(): void
-    {
-        if (empty($this->key)) {
-            $this->key = $this->generateKey();
-        }
-
-        if (empty($this->iv)) {
-            $this->iv = $this->generateIv();
-        }
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getIv(): ?string
-    {
-        return $this->iv;
-    }
-
-    /**
-     * @param string $iv
-     */
-    public function setIv(string $iv): void
-    {
-        $this->iv = $iv;
     }
 
     /**
@@ -175,22 +130,6 @@ class Symmetric
     }
 
     /**
-     * @return Base64Parser
-     */
-    public function getBase64Parser(): Base64Parser
-    {
-        return $this->base64Parser;
-    }
-
-    /**
-     * @param Base64Parser $base64Parser
-     */
-    public function setBase64Parser(Base64Parser $base64Parser): void
-    {
-        $this->base64Parser = $base64Parser;
-    }
-
-    /**
      * @return string
      */
     public function getMethod(): string
@@ -200,30 +139,14 @@ class Symmetric
 
     /**
      * @param string $method
-     * @throws CipherMethodNotSupportedException
+     * @throws MethodNotSupportedException
      */
     public function setMethod(string $method): void
     {
         if (in_array($method, openssl_get_cipher_methods()) == false) {
-            throw new CipherMethodNotSupportedException();
+            throw new MethodNotSupportedException("The $method method is not supported.");
         }
 
         $this->method = $method;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOptions(): int
-    {
-        return $this->options;
-    }
-
-    /**
-     * @param int $options
-     */
-    public function setOptions(int $options)
-    {
-        $this->options = $options;
     }
 }

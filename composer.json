@@ -1,13 +1,14 @@
 {
   "name": "miladrahimi/phpcrypt",
-  "description": "Encryption, decryption, and hashing tools for PHP projects",
+  "description": "Encryption, decryption, and password hashing tools for PHP projects",
   "keywords": [
     "Crypt",
     "Cryptography",
     "Encrypt",
     "Decrypt",
     "Hash",
-    "Hash",
+    "Symmetric",
+    "Asymmetric",
     "OpenSSL",
     "RSA",
     "AES"

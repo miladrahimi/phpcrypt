@@ -2,7 +2,6 @@
 
 namespace MiladRahimi\PhpCrypt\Tests;
 
-use MiladRahimi\PhpCrypt\Base64\SafeBase64Parser;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 use MiladRahimi\PhpCrypt\Rsa;
@@ -37,6 +36,17 @@ class RsaTest extends TestCase
      * @throws InvalidKeyException
      * @throws EncryptionException
      */
+    public function test_encrypt_with_private_key_and_base64_off()
+    {
+        $rsa = $this->rsa();
+        $encrypted = $rsa->encryptWithPrivate('secret', false);
+        $this->assertEquals('secret', $rsa->decryptWithPublic($encrypted, false));
+    }
+
+    /**
+     * @throws InvalidKeyException
+     * @throws EncryptionException
+     */
     public function test_encrypt_with_public_key()
     {
         $rsa = $this->rsa();
@@ -46,14 +56,13 @@ class RsaTest extends TestCase
 
     /**
      * @throws InvalidKeyException
+     * @throws EncryptionException
      */
-    public function test_set_and_get_base64_parser()
+    public function test_encrypt_with_public_key_and_base64_off()
     {
         $rsa = $this->rsa();
-
-        $parser = new SafeBase64Parser();
-        $rsa->setBase64Parser($parser);
-        $this->assertSame($parser, $rsa->getBase64Parser());
+        $encrypted = $rsa->encryptWithPublic('secret', false);
+        $this->assertEquals('secret', $rsa->decryptWithPrivate($encrypted, false));
     }
 
     /**
@@ -61,10 +70,23 @@ class RsaTest extends TestCase
      */
     public function test_set_and_get_public_key()
     {
-        $rsa = $this->rsa();
+        $key = file_get_contents(__DIR__ . '/../resources/test_public_key.pem');
 
-        $key = __DIR__ . '/../resources/test_public_key.pem';
+        $rsa = $this->rsa();
         $rsa->setPublicKey($key);
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws InvalidKeyException
+     */
+    public function test_set_and_get_private_key()
+    {
+        $key = file_get_contents(__DIR__ . '/../resources/test_private_key.pem');
+
+        $rsa = $this->rsa();
+        $rsa->setPrivateKey($key);
 
         $this->assertTrue(true);
     }

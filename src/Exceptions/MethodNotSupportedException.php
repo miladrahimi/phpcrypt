@@ -4,7 +4,7 @@ namespace MiladRahimi\PhpCrypt\Exceptions;
 
 use Exception;
 
-class CipherMethodNotSupportedException extends Exception
+class MethodNotSupportedException extends Exception
 {
     //
 }

@@ -13,21 +13,6 @@ use MiladRahimi\PhpCrypt\Exceptions\HashingException;
 class Hash
 {
     /**
-     * @var int
-     */
-    private $algorithm;
-
-    /**
-     * Hash constructor.
-     *
-     * @param int $algorithm
-     */
-    public function __construct(int $algorithm = PASSWORD_BCRYPT)
-    {
-        $this->algorithm = $algorithm;
-    }
-
-    /**
      * Make a hash from the given password
      *
      * @param string $password
@@ -36,7 +21,7 @@ class Hash
      */
     public function make(string $password): string
     {
-        $result = password_hash($password, $this->algorithm);
+        $result = password_hash($password, PASSWORD_BCRYPT);
         if ($result === false) {
             throw new HashingException();
         }
@@ -51,7 +36,7 @@ class Hash
      * @param string $hashedPassword
      * @return bool
      */
-    public function verify(string $plainPassword, string $hashedPassword)
+    public function verify(string $plainPassword, string $hashedPassword): bool
     {
         return password_verify($plainPassword, $hashedPassword);
     }
