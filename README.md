@@ -171,5 +171,6 @@ The `Symmetric`, `RSA`, and `Hash` classes may throw these exceptions:
 * `MethodNotSupportedException`: When the passed method to the `Symmetric` class is not supported.
 * `InvalidKeyException`: When the passed key to `RSA` class is not valid.
 
+## License
 
-
+PhpCrypt is initially created by [Milad Rahimi](https://miladrahimi.com) and released under the [MIT License](http://opensource.org/licenses/mit-license.php).
