@@ -31,7 +31,7 @@ class SymmetricTest extends TestCase
     public function test_encrypt_and_decrypt_with_custom_key()
     {
         $symmetric = new Symmetric();
-        $symmetric->setKey($symmetric->generateKey());
+        $symmetric->setKey(Symmetric::generateKey());
         $result = $symmetric->encrypt('secret');
 
         $this->assertEquals('secret', $symmetric->decrypt($result));
@@ -44,7 +44,6 @@ class SymmetricTest extends TestCase
     public function test_decrypt_with_invalid_data_it_should_fail()
     {
         $symmetric = new Symmetric();
-        $symmetric->generateKey();
 
         $this->expectException(DecryptionException::class);
         $this->expectExceptionMessage('Encrypted data is in invalid format.');
@@ -53,9 +52,7 @@ class SymmetricTest extends TestCase
 
     public function test_supportedMethods()
     {
-        $symmetric = new Symmetric();
-
-        $methods = $symmetric->supportedMethods();
+        $methods = Symmetric::supportedMethods();
         $this->assertIsArray($methods);
     }
 
