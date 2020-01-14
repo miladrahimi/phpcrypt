@@ -130,6 +130,21 @@ $result = $rsa->encryptWithPublic('secret');
 echo $rsa->decryptWithPrivate($result); // secret
 ```
 
+### Base64 Encoding
+
+In default, the encrypted data returned by `RSA::encryptWithPrivate` and `encryptWithPublic` will be Base64 encoded. You can disable this feature this way:
+
+```php
+use MiladRahimi\PhpCrypt\Rsa;
+
+$rsa = new Rsa('./private_key.pem', './public_key.pem');
+
+// For public encryption
+$result = $rsa->encryptWithPublic('secret', false);
+// And for private encryption
+$result = $rsa->encryptWithPrivate('secret', false);
+```
+
 ## Hashing
 
 This example shows how to hash data and verify it.
