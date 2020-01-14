@@ -114,7 +114,7 @@ use MiladRahimi\PhpCrypt\Rsa;
 $rsa = new Rsa('./private_key.pem', './public_key.pem');
 
 $result = $rsa->encryptWithPrivate('secret');
-echo $rsa->decryptWithPublic($result); // Output: secret
+echo $rsa->decryptWithPublic($result); // secret
 ```
 
 ### Encryption with public
@@ -127,7 +127,7 @@ use MiladRahimi\PhpCrypt\Rsa;
 $rsa = new Rsa('./private_key.pem', './public_key.pem');
 
 $result = $rsa->encryptWithPublic('secret');
-echo $rsa->decryptWithPrivate($result);
+echo $rsa->decryptWithPrivate($result); // secret
 ```
 
 ## Hashing
