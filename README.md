@@ -56,7 +56,9 @@ $symmetric = new Symmetric($key);
 
 And if you want to generate a key:
 
-```
+```php
+use MiladRahimi\PhpCrypt\Symmetric;
+
 $key = Symmetric::generateKey();
 ```
 
