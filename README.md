@@ -163,7 +163,7 @@ echo $hash->verify('AnotherPassword', $hashedPassword); // false
 
 ## Error Handling
 
-The `symmetric` and `RSA` classes may throw these exceptions:
+The `symmetric`, `RSA`, and `Hash` classes may throw these exceptions:
 
 * `EncryptionException`: When it cannot encrypt.
 * `DecryptionException`: When it cannot decrypt.
