@@ -2,6 +2,7 @@
 
 namespace MiladRahimi\PhpCrypt\Tests;
 
+use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 use MiladRahimi\PhpCrypt\Rsa;
@@ -55,8 +56,31 @@ class RsaTest extends TestCase
     }
 
     /**
+     * @throws DecryptionException
      * @throws InvalidKeyException
+     */
+    public function test_decrypt_with_public_key_it_should_fail()
+    {
+        $rsa = $this->rsa();
+        $this->expectException(DecryptionException::class);
+        $this->assertEquals('secret', $rsa->decryptWithPublic('WRONG-CIPHER'));
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws InvalidKeyException
+     */
+    public function test_decrypt_with_private_key_it_should_fail()
+    {
+        $rsa = $this->rsa();
+        $this->expectException(DecryptionException::class);
+        $this->assertEquals('secret', $rsa->decryptWithPrivate('WRONG-CIPHER'));
+    }
+
+    /**
      * @throws EncryptionException
+     * @throws InvalidKeyException
+     * @throws DecryptionException
      */
     public function test_encrypt_with_public_key_and_base64_off()
     {
