@@ -8,4 +8,4 @@ $key = '1234567890123456';
 $symmetric = new Symmetric($key);
 
 $result = $symmetric->encrypt('secret');
-echo $symmetric->decrypt($result); // Output: secret
+echo $symmetric->decrypt($result); // secret

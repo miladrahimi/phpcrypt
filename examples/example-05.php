@@ -12,4 +12,4 @@ try {
 }
 
 $result = $symmetric->encrypt('secret');
-echo $symmetric->decrypt($result); // Output: secret
+echo $symmetric->decrypt($result); // secret
