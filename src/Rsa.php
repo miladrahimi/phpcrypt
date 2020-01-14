@@ -127,7 +127,7 @@ class Rsa
     {
         if (file_exists($publicKey)) {
             if (!is_readable($publicKey) || !($publicKey = file_get_contents($publicKey))) {
-                throw new InvalidKeyException('The private key file is not readable.');
+                throw new InvalidKeyException('The public key file is not readable.');
             }
         }
 
