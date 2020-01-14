@@ -1,5 +1,7 @@
-<phpunit backupGlobals="false" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true">
+<phpunit backupGlobals="false" colors="true"
+         convertErrorsToExceptions="false"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false">
     <testsuites>
         <testsuite name="main">
             <directory>./tests</directory>
