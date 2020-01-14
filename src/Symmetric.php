@@ -34,7 +34,7 @@ class Symmetric
      */
     public function __construct(?string $key = null, string $method = 'aes-256-cbc')
     {
-        $this->setKey($key ?: $this->generateKey());
+        $this->setKey($key ?: static::generateKey());
         $this->setMethod($method);
     }
 
@@ -88,7 +88,7 @@ class Symmetric
      * @param int $size
      * @return string
      */
-    public function generateKey(int $size = 256): string
+    public static function generateKey(int $size = 256): string
     {
         return openssl_random_pseudo_bytes($size / 8);
     }
@@ -108,7 +108,7 @@ class Symmetric
      *
      * @return array
      */
-    public function supportedMethods(): array
+    public static function supportedMethods(): array
     {
         return openssl_get_cipher_methods(true);
     }
