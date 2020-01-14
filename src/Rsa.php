@@ -2,6 +2,7 @@
 
 namespace MiladRahimi\PhpCrypt;
 
+use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 
@@ -83,7 +84,7 @@ class Rsa
      * @param string $data
      * @param bool $base64
      * @return string
-     * @throws EncryptionException
+     * @throws DecryptionException
      */
     public function decryptWithPublic(string $data, bool $base64 = true): string
     {
@@ -91,7 +92,7 @@ class Rsa
 
         $decrypted = '';
         if (openssl_public_decrypt($data, $decrypted, $this->publicKey) == false) {
-            throw new EncryptionException(openssl_error_string());
+            throw new DecryptionException(openssl_error_string());
         }
 
         return $decrypted;
@@ -104,7 +105,7 @@ class Rsa
      * @param string $data
      * @param bool $base64
      * @return string
-     * @throws EncryptionException
+     * @throws DecryptionException
      */
     public function decryptWithPrivate(string $data, bool $base64 = true): string
     {
@@ -112,7 +113,7 @@ class Rsa
 
         $decrypted = '';
         if (openssl_private_decrypt($data, $decrypted, $this->privateKey) == false) {
-            throw new EncryptionException(openssl_error_string());
+            throw new DecryptionException(openssl_error_string());
         }
 
         return $decrypted;
