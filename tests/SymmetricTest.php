@@ -15,7 +15,7 @@ class SymmetricTest extends TestCase
      * @throws EncryptionException
      * @throws MethodNotSupportedException
      */
-    public function test_encrypt_and_decrypt_without_key_and_iv()
+    public function test_encrypt_and_decrypt_without_key()
     {
         $symmetric = new Symmetric(null);
         $result = $symmetric->encrypt('secret');
