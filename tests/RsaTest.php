@@ -132,6 +132,7 @@ class RsaTest extends TestCase
     {
         $rsa = $this->rsa();
         $this->expectException(InvalidKeyException::class);
+        $this->expectExceptionMessage('The public key file is not readable.');
         $rsa->setPublicKey('..');
     }
 
@@ -152,6 +153,7 @@ class RsaTest extends TestCase
     {
         $rsa = $this->rsa();
         $this->expectException(InvalidKeyException::class);
+        $this->expectExceptionMessage('The private key file is not readable.');
         $rsa->setPrivateKey('..');
     }
 }
