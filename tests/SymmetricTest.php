@@ -8,6 +8,8 @@ use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Symmetric;
 use PHPUnit\Framework\TestCase;
 
+error_reporting(E_ERROR | E_PARSE);
+
 class SymmetricTest extends TestCase
 {
     /**
@@ -48,6 +50,18 @@ class SymmetricTest extends TestCase
         $this->expectException(DecryptionException::class);
         $this->expectExceptionMessage('Encrypted data is in invalid format.');
         $symmetric->decrypt('Invalid Encrypted Data!');
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws MethodNotSupportedException
+     */
+    public function test_decrypt_with_wrong_data_it_should_fail()
+    {
+        $symmetric = new Symmetric();
+
+        $this->expectException(DecryptionException::class);
+        $symmetric->decrypt('WRONG-IV.WRONG-DATE');
     }
 
     public function test_supportedMethods()
