@@ -40,7 +40,7 @@ $encryptedData = $symmetric->encrypt('secret');
 echo $symmetric->decrypt($encryptedData); // secret
 ```
 
-It generates a random key and uses `aes-256-cbc` as the method for encrypting/decrypting.
+It generates a random key and uses `aes-256-cbc` method for encrypting/decrypting.
 
 ### Custom Key
 
