@@ -6,12 +6,12 @@
 
 # PhpCrypt
 
-PhpCrypt is a package for encryption, decryption, and password hashing in PHP projects. It provides an easy-to-use and fluent interface.
+PhpCrypt is a package for encryption, decryption, and hashing in PHP projects. It provides an easy-to-use and fluent interface.
 
 Features:
 * Symmetric encryption/decryption using AES and other symmetric methods.
 * Asymmetric encryption/decryption using the RSA method.
-* Hashing and verifying passwords using the BCrypt method.
+* Hashing and verifying data (e.g. passwords) using the BCrypt method.
 
 ## Versions
 
@@ -50,12 +50,18 @@ If you have already a key, you can use it this way:
 ```php
 use MiladRahimi\PhpCrypt\Symmetric;
 
+// Set using constructor
 $key = '1234567890123456';
 $symmetric = new Symmetric($key);
-// ...
+
+// Set using setter
+$symmetric->setKey($key);
+
+// Get using getter
+$myKey = $symmetric->getKey();
 ```
 
-If you want to generate a key:
+If you want to generate a new random key:
 
 ```php
 use MiladRahimi\PhpCrypt\Symmetric;
