@@ -5,155 +5,146 @@ namespace MiladRahimi\PhpCrypt\Tests;
 use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
-use MiladRahimi\PhpCrypt\Rsa;
+use MiladRahimi\PhpCrypt\PrivateRsa;
+use MiladRahimi\PhpCrypt\PublicRsa;
 use PHPUnit\Framework\TestCase;
 
 class RsaTest extends TestCase
 {
     /**
-     * @return Rsa
-     * @throws InvalidKeyException
+     * @var PrivateRsa
      */
-    private function rsa(): Rsa
-    {
-        return new Rsa(
-            __DIR__ . '/../resources/test_private_key.pem',
-            __DIR__ . '/../resources/test_public_key.pem'
-        );
-    }
+    protected $private;
+
+    /**
+     * @var PublicRsa
+     */
+    protected $public;
 
     /**
      * @throws InvalidKeyException
-     * @throws EncryptionException
      */
-    public function test_encrypt_with_private_key()
+    public function setUp()
     {
-        $rsa = $this->rsa();
-        $encrypted = $rsa->encryptWithPrivate('secret');
-        $this->assertEquals('secret', $rsa->decryptWithPublic($encrypted));
-    }
+        parent::setUp();
 
-    /**
-     * @throws InvalidKeyException
-     * @throws EncryptionException
-     */
-    public function test_encrypt_with_private_key_and_base64_off()
-    {
-        $rsa = $this->rsa();
-        $encrypted = $rsa->encryptWithPrivate('secret', false);
-        $this->assertEquals('secret', $rsa->decryptWithPublic($encrypted, false));
-    }
-
-    /**
-     * @throws InvalidKeyException
-     * @throws EncryptionException
-     */
-    public function test_encrypt_with_public_key()
-    {
-        $rsa = $this->rsa();
-        $encrypted = $rsa->encryptWithPublic('secret');
-        $this->assertEquals('secret', $rsa->decryptWithPrivate($encrypted));
+        $this->private = new PrivateRsa(__DIR__ . '/resources/test_private_key.pem');
+        $this->public = new PublicRsa(__DIR__ . '/resources/test_public_key.pem');
     }
 
     /**
      * @throws DecryptionException
-     * @throws InvalidKeyException
+     * @throws EncryptionException
      */
-    public function test_decrypt_with_public_key_it_should_fail()
+    public function test_encrypting_with_the_private_key()
     {
-        $rsa = $this->rsa();
+        $encrypted = $this->private->encrypt('secret');
+        $this->assertEquals('secret', $this->public->decrypt($encrypted));
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws EncryptionException
+     */
+    public function test_encrypting_with_the_private_key_and_base64_off()
+    {
+        $encrypted = $this->private->encrypt('secret', false);
+        $this->assertEquals('secret', $this->public->decrypt($encrypted, false));
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws EncryptionException
+     */
+    public function test_encrypting_with_the_public_key()
+    {
+        $encrypted = $this->public->encrypt('secret');
+        $this->assertEquals('secret', $this->private->decrypt($encrypted));
+    }
+
+    /**
+     * @throws DecryptionException
+     * @throws EncryptionException
+     */
+    public function test_encrypting_with_the_public_key_and_base64_off()
+    {
+        $encrypted = $this->public->encrypt('secret', false);
+        $this->assertEquals('secret', $this->private->decrypt($encrypted, false));
+    }
+
+    /**
+     * @throws DecryptionException
+     */
+    public function test_decrypting_an_invalid_cipher_with_the_public_key_it_should_fail()
+    {
         $this->expectException(DecryptionException::class);
-        $this->assertEquals('secret', $rsa->decryptWithPublic('WRONG-CIPHER'));
+        $this->assertEquals('secret', $this->public->decrypt('INVALID-CIPHER'));
     }
 
     /**
      * @throws DecryptionException
-     * @throws InvalidKeyException
      */
-    public function test_decrypt_with_private_key_it_should_fail()
+    public function test_decrypting_an_invalid_cipher_with_the_private_key_it_should_fail()
     {
-        $rsa = $this->rsa();
         $this->expectException(DecryptionException::class);
-        $this->assertEquals('secret', $rsa->decryptWithPrivate('WRONG-CIPHER'));
-    }
-
-    /**
-     * @throws EncryptionException
-     * @throws InvalidKeyException
-     * @throws DecryptionException
-     */
-    public function test_encrypt_with_public_key_and_base64_off()
-    {
-        $rsa = $this->rsa();
-        $encrypted = $rsa->encryptWithPublic('secret', false);
-        $this->assertEquals('secret', $rsa->decryptWithPrivate($encrypted, false));
+        $this->assertEquals('secret', $this->private->decrypt('INVALID-CIPHER'));
     }
 
     /**
      * @throws InvalidKeyException
      */
-    public function test_set_and_get_public_key()
+    public function test_setting_a_public_key()
     {
-        $key = file_get_contents(__DIR__ . '/../resources/test_public_key.pem');
-
-        $rsa = $this->rsa();
-        $rsa->setPublicKey($key);
-
+        $key = file_get_contents(__DIR__ . '/resources/test_public_key.pem');
+        $this->public->setKey($key);
         $this->assertTrue(true);
     }
 
     /**
      * @throws InvalidKeyException
      */
-    public function test_set_and_get_private_key()
+    public function test_setting_a_private_key()
     {
-        $key = file_get_contents(__DIR__ . '/../resources/test_private_key.pem');
-
-        $rsa = $this->rsa();
-        $rsa->setPrivateKey($key);
-
+        $key = file_get_contents(__DIR__ . '/resources/test_private_key.pem');
+        $this->private->setKey($key);
         $this->assertTrue(true);
     }
 
     /**
      * @throws InvalidKeyException
      */
-    public function test_set_and_get_unreal_public_key_it_should_fail()
+    public function test_setting_an_invalid_public_key_file_it_should_fail()
     {
-        $rsa = $this->rsa();
         $this->expectException(InvalidKeyException::class);
-        $rsa->setPublicKey('invalid.pem');
+        $this->public->setKey('invalid.pem');
     }
 
     /**
      * @throws InvalidKeyException
      */
-    public function test_set_and_get_invalid_public_key_it_should_fail()
+    public function test_setting_an_invalid_public_key_path_it_should_fail()
     {
-        $rsa = $this->rsa();
         $this->expectException(InvalidKeyException::class);
-        $this->expectExceptionMessage('The public key file is not readable.');
-        $rsa->setPublicKey('..');
+        $this->expectExceptionMessage('The key file is not readable.');
+        $this->public->setKey('..');
     }
 
     /**
      * @throws InvalidKeyException
      */
-    public function test_set_and_get_unreal_private_key_it_should_fail()
+    public function test_setting_an_invalid_private_key_file_it_should_fail()
     {
-        $rsa = $this->rsa();
         $this->expectException(InvalidKeyException::class);
-        $rsa->setPrivateKey('invalid.pem');
+        $this->private->setKey('invalid.pem');
     }
 
     /**
      * @throws InvalidKeyException
      */
-    public function test_set_and_get_invalid_private_key_it_should_fail()
+    public function test_setting_an_invalid_private_key_path_it_should_fail()
     {
-        $rsa = $this->rsa();
         $this->expectException(InvalidKeyException::class);
-        $this->expectExceptionMessage('The private key file is not readable.');
-        $rsa->setPrivateKey('..');
+        $this->expectExceptionMessage('The key file is not readable.');
+        $this->private->setKey('..');
     }
 }

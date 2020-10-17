@@ -2,24 +2,23 @@
 
 namespace MiladRahimi\PhpCrypt\Tests;
 
+error_reporting(E_ERROR | E_PARSE);
+
 use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
 use MiladRahimi\PhpCrypt\Exceptions\DecryptionException;
 use MiladRahimi\PhpCrypt\Exceptions\EncryptionException;
 use MiladRahimi\PhpCrypt\Symmetric;
 use PHPUnit\Framework\TestCase;
 
-error_reporting(E_ERROR | E_PARSE);
-
 class SymmetricTest extends TestCase
 {
     /**
      * @throws DecryptionException
      * @throws EncryptionException
-     * @throws MethodNotSupportedException
      */
-    public function test_encrypt_and_decrypt_without_key()
+    public function test_encrypting_and_decrypting_without_key()
     {
-        $symmetric = new Symmetric(null);
+        $symmetric = new Symmetric();
         $result = $symmetric->encrypt('secret');
 
         $this->assertEquals('secret', $symmetric->decrypt($result));
@@ -28,9 +27,8 @@ class SymmetricTest extends TestCase
     /**
      * @throws DecryptionException
      * @throws EncryptionException
-     * @throws MethodNotSupportedException
      */
-    public function test_encrypt_and_decrypt_with_custom_key()
+    public function test_encrypting_and_decrypting_with_a_given_key()
     {
         $symmetric = new Symmetric();
         $symmetric->setKey(Symmetric::generateKey());
@@ -41,9 +39,8 @@ class SymmetricTest extends TestCase
 
     /**
      * @throws DecryptionException
-     * @throws MethodNotSupportedException
      */
-    public function test_decrypt_with_invalid_data_it_should_fail()
+    public function test_decrypting_an_invalid_cipher_it_should_fail()
     {
         $symmetric = new Symmetric();
 
@@ -54,9 +51,8 @@ class SymmetricTest extends TestCase
 
     /**
      * @throws DecryptionException
-     * @throws MethodNotSupportedException
      */
-    public function test_decrypt_with_wrong_data_it_should_fail()
+    public function test_decrypting_another_invalid_cipher_it_should_fail()
     {
         $symmetric = new Symmetric();
 
@@ -70,7 +66,7 @@ class SymmetricTest extends TestCase
         $this->assertIsArray($methods);
     }
 
-    public function test_set_and_get_key()
+    public function test_setting_and_getting_a_key()
     {
         $symmetric = new Symmetric();
 
@@ -81,7 +77,7 @@ class SymmetricTest extends TestCase
     /**
      * @throws MethodNotSupportedException
      */
-    public function test_set_and_get_method()
+    public function test_setting_and_getting_a_method()
     {
         $symmetric = new Symmetric();
 
