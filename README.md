@@ -15,7 +15,8 @@ Features:
 
 ## Versions
 
-* **v4.x.x (LTS)**
+* **v5.x.x (LTS)**
+* v4.x.x (LTS)
 * v3.x.x (Unsupported)
 * v2.x.x (Unsupported)
 * v1.x.x (Unsupported)
@@ -25,7 +26,7 @@ Features:
 Install [Composer](https://getcomposer.org) and run following command in your project's root directory:
 
 ```bash
-composer require miladrahimi/phpcrypt "4.*"
+composer require miladrahimi/phpcrypt "5.*"
 ```
 
 ## Symmetric Encryption
