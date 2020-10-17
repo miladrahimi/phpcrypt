@@ -6,7 +6,8 @@
 
 # PhpCrypt
 
-PhpCrypt is a package for encryption, decryption, and hashing in PHP projects. It provides an easy-to-use and fluent interface.
+PhpCrypt is a package for encryption, decryption, and hashing data in PHP projects.
+It provides an easy-to-use and fluent interface.
 
 Features:
 * Symmetric encryption/decryption using AES and other symmetric methods.
@@ -15,15 +16,15 @@ Features:
 
 ## Versions
 
-* **v5.x.x (LTS)**
-* v4.x.x (LTS)
+* v5.x.x
+* v4.x.x
 * v3.x.x (Unsupported)
 * v2.x.x (Unsupported)
 * v1.x.x (Unsupported)
 
 ## Installation
 
-Install [Composer](https://getcomposer.org) and run following command in your project's root directory:
+Install [Composer](https://getcomposer.org) and run the following command in your project's root directory:
 
 ```bash
 composer require miladrahimi/phpcrypt "5.*"
@@ -41,27 +42,30 @@ $encryptedData = $symmetric->encrypt('secret');
 echo $symmetric->decrypt($encryptedData); // secret
 ```
 
-It generates a random key and uses `aes-256-cbc` method for encrypting/decrypting.
+It generates a random key and uses `aes-256-cbc` method for encrypting/decrypting data.
 
 ### Custom Key
 
-If you have already a key, you can use it this way:
+If you have already a key, you can use your own key like this:
 
 ```php
 use MiladRahimi\PhpCrypt\Symmetric;
 
-// Set using constructor
 $key = '1234567890123456';
+
+// Set the key using the constructor
 $symmetric = new Symmetric($key);
 
-// Set using setter
+// Or set the key using the setter
+$symmetric = new Symmetric();
 $symmetric->setKey($key);
 
-// Get using getter
+// And get the key using the getter
 $myKey = $symmetric->getKey();
 ```
 
-If you want to generate a new random key:
+The method `generateKey` can help you to generate a new random key.
+See the snippet below.
 
 ```php
 use MiladRahimi\PhpCrypt\Symmetric;
@@ -69,9 +73,11 @@ use MiladRahimi\PhpCrypt\Symmetric;
 $key = Symmetric::generateKey();
 ```
 
-### Custom method
+### Custom Methods
 
-In default, The `Symmetric` class uses `aes-256-cbc` method. You can change it to your preferred method this way:
+In default, The `Symmetric` class uses `aes-256-cbc` method to encrypt/decrypt data.
+You can use your preferred method as well.
+See the following example.
 
 ```php
 use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
@@ -82,7 +88,7 @@ try {
     $symmetric->setMethod('aria-256-ctr');
     // ...
 } catch (MethodNotSupportedException $e) {
-    // You method is not supported.
+    // The method is not supported.
 }
 ```
 
@@ -98,11 +104,12 @@ print_r(Symmetric::supportedMethods());
 
 ## RSA Encryption
 
-The examples below illustrates how to encrypt/decrypt data using the RSA algorithm.
+RSA is a popular asymmetric encryption/decryption algorithm.
+The examples below illustrate how to encrypt/decrypt data using the RSA algorithm.
 
-### Encryption with private
+### Encryption with private key
 
-In this example, we encrypt with a private key and decrypt with the related public key.
+In this example, we encrypt data with a private key and decrypt it with the related public key.
 
 ```php
 use MiladRahimi\PhpCrypt\PrivateRsa;
@@ -115,9 +122,9 @@ $result = $privateRsa->encrypt('secret');
 echo $publicRsa->decrypt($result); // secret
 ```
 
-### Encryption with public
+### Encryption with public key
 
-In this example, we encrypt with a public key and decrypt with the related private key.
+In this example, we encrypt data with a public key and decrypt it with the related private key.
 
 ```php
 use MiladRahimi\PhpCrypt\PrivateRsa;
@@ -132,7 +139,8 @@ echo $privateRsa->decrypt($result); // secret
 
 ### Base64 Encoding
 
-In default, the encrypted data returned by `PrivateRsa::encrypt()` and `PublicRsa::encrypt()` will be Base64 encoded. You can disable if you pass `false` for `base64` argument.
+In default, the encrypted data returned by `PrivateRsa::encrypt()` and `PublicRsa::encrypt()` methods will be Base64 encoded.
+You can disable this encoding like the example below.
 
 ```php
 use MiladRahimi\PhpCrypt\PrivateRsa;
@@ -141,10 +149,10 @@ use MiladRahimi\PhpCrypt\PublicRsa;
 $privateRsa = new PrivateRsa('private_key.pem');
 $publicRsa = new PublicRsa('public_key.pem');
 
-// For public encryption
+// Disable Base64 encoding for public encryption
 $result = $publicRsa->encrypt('secret', false);
 
-// And for private encryption
+// Disable Base64 encoding for private encryption
 $result = $privateRsa->encrypt('secret', false);
 ```
 
@@ -166,10 +174,10 @@ echo $hash->verify('AnotherPassword', $hashedPassword); // false
 
 The `Symmetric`, `PrivateRsa`, `PublicRsa`, and `Hash` classes may throw these exceptions:
 
-* `EncryptionException`: When it cannot encrypt.
-* `DecryptionException`: When it cannot decrypt.
-* `HashingException`: When it cannot hash.
-* `MethodNotSupportedException`: When the passed method to the `Symmetric` class is not supported.
+* `EncryptionException`: When it cannot encrypt data.
+* `DecryptionException`: When it cannot decrypt data.
+* `HashingException`: When it cannot hash data.
+* `MethodNotSupportedException`: When the passed encryption method to the `Symmetric` class is not supported.
 * `InvalidKeyException`: When the passed key to `PrivateRsa` or `PublicRsa` classes is not valid.
 
 ## License
