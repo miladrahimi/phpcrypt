@@ -11,7 +11,7 @@ class HashTest extends TestCase
     /**
      * @throws HashingException
      */
-    public function test_make_and_verify_secret_hash()
+    public function test_making_a_hash_from_a_secret_and_verifying_it()
     {
         $hash = new Hash();
         $hashed = $hash->make('secret');
@@ -21,7 +21,7 @@ class HashTest extends TestCase
     /**
      * @throws HashingException
      */
-    public function test_make_and_verify_a_random_hash()
+    public function test_making_a_hash_from_a_random_string_and_verifying_it()
     {
         $plain = md5(mt_rand(1, 999999));
 

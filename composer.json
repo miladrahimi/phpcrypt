@@ -1,19 +1,20 @@
 {
   "name": "miladrahimi/phpcrypt",
-  "description": "Encryption, decryption, and password hashing tools for PHP projects",
+  "description": "Encryption, decryption, and hashing tools for PHP projects",
   "keywords": [
     "Crypt",
     "Cryptography",
     "Encrypt",
     "Decrypt",
     "Hash",
+    "Password",
     "Symmetric",
     "Asymmetric",
     "OpenSSL",
     "RSA",
     "AES"
   ],
-  "homepage": "http://miladrahimi.github.io",
+  "homepage": "https://github.com/miladrahimi/phpcrypt",
   "type": "library",
   "license": "MIT",
   "authors": [

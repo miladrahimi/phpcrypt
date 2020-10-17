@@ -6,22 +6,22 @@ use MiladRahimi\PhpCrypt\Exceptions\HashingException;
 
 /**
  * Class Hash
- * It hashes and verifies passwords.
+ * It hashes and verifies hashed data (e.g. passwords).
  *
  * @package MiladRahimi\PhpCrypt
  */
 class Hash
 {
     /**
-     * Make a hash from the given password
+     * Make a hash from the given plain data
      *
-     * @param string $password
+     * @param string $plain
      * @return string
      * @throws HashingException
      */
-    public function make(string $password): string
+    public function make(string $plain): string
     {
-        $result = password_hash($password, PASSWORD_BCRYPT);
+        $result = password_hash($plain, PASSWORD_BCRYPT);
         if ($result === false) {
             throw new HashingException();
         }
@@ -30,14 +30,14 @@ class Hash
     }
 
     /**
-     * Verify the given plain password with the given hashed password
+     * Verify the given plain with the given hashed value
      *
-     * @param string $plainPassword
-     * @param string $hashedPassword
+     * @param string $plain
+     * @param string $hashed
      * @return bool
      */
-    public function verify(string $plainPassword, string $hashedPassword): bool
+    public function verify(string $plain, string $hashed): bool
     {
-        return password_verify($plainPassword, $hashedPassword);
+        return password_verify($plain, $hashed);
     }
 }
