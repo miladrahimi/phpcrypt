@@ -17,7 +17,7 @@ class Symmetric
     /**
      * @var string
      */
-    private $method;
+    private $method = 'aes-256-cbc';
 
     /**
      * @var string
@@ -28,14 +28,11 @@ class Symmetric
      * Symmetric constructor.
      * It auto-generates the key if given one is null
      *
-     * @param string $method
      * @param string|null $key
-     * @throws MethodNotSupportedException
      */
-    public function __construct(?string $key = null, string $method = 'aes-256-cbc')
+    public function __construct(?string $key = null)
     {
         $this->setKey($key ?: static::generateKey());
-        $this->setMethod($method);
     }
 
     /**
@@ -122,9 +119,9 @@ class Symmetric
     }
 
     /**
-     * @param string $key
+     * @param string|null $key
      */
-    public function setKey(string $key): void
+    public function setKey(?string $key): void
     {
         $this->key = $key;
     }

@@ -54,7 +54,7 @@ $symmetric = new Symmetric($key);
 // ...
 ```
 
-And if you want to generate a key:
+If you want to generate a key:
 
 ```php
 use MiladRahimi\PhpCrypt\Symmetric;
@@ -71,21 +71,8 @@ use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
 use MiladRahimi\PhpCrypt\Symmetric;
 
 try {
-    $symmetric = new Symmetric('YOUR-KEY', 'aria-256-ctr');
-    // ...
-} catch (MethodNotSupportedException $e) {
-    // You method is not supported.
-}
-```
-
-If you still like to have an auto-generated key for your custom method, pass null for the first argument.
-
-```php
-use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;
-use MiladRahimi\PhpCrypt\Symmetric;
-
-try {
-    $symmetric = new Symmetric(null, 'aria-256-ctr');
+    $symmetric = new Symmetric();
+    $symmetric->setMethod('aria-256-ctr');
     // ...
 } catch (MethodNotSupportedException $e) {
     // You method is not supported.
@@ -94,7 +81,7 @@ try {
 
 ### Supported Methods
 
-If you want to know which methods are currently supported by your installed OpenSSL extension, see the snippet below:
+If you want to know which methods do your installed OpenSSL extension support, see the snippet below:
 
 ```php
 use MiladRahimi\PhpCrypt\Symmetric;
@@ -111,12 +98,14 @@ The examples below illustrates how to encrypt/decrypt data using the RSA algorit
 In this example, we encrypt with a private key and decrypt with the related public key.
 
 ```php
-use MiladRahimi\PhpCrypt\Rsa;
+use MiladRahimi\PhpCrypt\PrivateRsa;
+use MiladRahimi\PhpCrypt\PublicRsa;
 
-$rsa = new Rsa('./private_key.pem', './public_key.pem');
+$privateRsa = new PrivateRsa('private_key.pem');
+$publicRsa = new PublicRsa('public_key.pem');
 
-$result = $rsa->encryptWithPrivate('secret');
-echo $rsa->decryptWithPublic($result); // secret
+$result = $privateRsa->encrypt('secret');
+echo $publicRsa->decrypt($result); // secret
 ```
 
 ### Encryption with public
@@ -124,27 +113,32 @@ echo $rsa->decryptWithPublic($result); // secret
 In this example, we encrypt with a public key and decrypt with the related private key.
 
 ```php
-use MiladRahimi\PhpCrypt\Rsa;
+use MiladRahimi\PhpCrypt\PrivateRsa;
+use MiladRahimi\PhpCrypt\PublicRsa;
 
-$rsa = new Rsa('./private_key.pem', './public_key.pem');
+$privateRsa = new PrivateRsa('private_key.pem');
+$publicRsa = new PublicRsa('public_key.pem');
 
-$result = $rsa->encryptWithPublic('secret');
-echo $rsa->decryptWithPrivate($result); // secret
+$result = $publicRsa->encrypt('secret');
+echo $privateRsa->decrypt($result); // secret
 ```
 
 ### Base64 Encoding
 
-In default, the encrypted data returned by `RSA::encryptWithPrivate()` and `RSA::encryptWithPublic()` will be Base64 encoded. You can disable if you pass `false` for `base64` argument.
+In default, the encrypted data returned by `PrivateRsa::encrypt()` and `PublicRsa::encrypt()` will be Base64 encoded. You can disable if you pass `false` for `base64` argument.
 
 ```php
-use MiladRahimi\PhpCrypt\Rsa;
+use MiladRahimi\PhpCrypt\PrivateRsa;
+use MiladRahimi\PhpCrypt\PublicRsa;
 
-$rsa = new Rsa('./private_key.pem', './public_key.pem');
+$privateRsa = new PrivateRsa('private_key.pem');
+$publicRsa = new PublicRsa('public_key.pem');
 
 // For public encryption
-$result = $rsa->encryptWithPublic('secret', false);
+$result = $publicRsa->encrypt('secret', false);
+
 // And for private encryption
-$result = $rsa->encryptWithPrivate('secret', false);
+$result = $privateRsa->encrypt('secret', false);
 ```
 
 ## Hashing
@@ -163,13 +157,13 @@ echo $hash->verify('AnotherPassword', $hashedPassword); // false
 
 ## Error Handling
 
-The `Symmetric`, `RSA`, and `Hash` classes may throw these exceptions:
+The `Symmetric`, `PrivateRsa`, `PublicRsa`, and `Hash` classes may throw these exceptions:
 
 * `EncryptionException`: When it cannot encrypt.
 * `DecryptionException`: When it cannot decrypt.
 * `HashingException`: When it cannot hash.
 * `MethodNotSupportedException`: When the passed method to the `Symmetric` class is not supported.
-* `InvalidKeyException`: When the passed key to `RSA` class is not valid.
+* `InvalidKeyException`: When the passed key to `PrivateRsa` or `PublicRsa` classes is not valid.
 
 ## License
 
